@@ -1,0 +1,37 @@
+{
+ "meta": {
+  "started": "2026-11-12 15:53",
+  "provider": "gemini",
+  "with_instructions": false,
+  "models": [
+   "gemini-3.1-flash-lite"
+  ],
+  "rerun_of": null
+ },
+ "results": [
+  {
+   "id": 19,
+   "category": "route",
+   "question": "How many stops from Seoul Station to Gangnam?",
+   "tools_all": [
+    "route"
+   ],
+   "grounded": true,
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.1-flash-lite: model did not answer within 60s",
+   "model": "gemini-3.1-flash-lite",
+   "seconds": 81.3,
+   "checks": [],
+   "tools": [
+    {
+     "name": "route",
+     "args": {
+      "from_station": "서울역",
+      "to_station": "강남"
+     },
+     "result": "No route found."
+    }
+   ]
+  }
+ ]
+}

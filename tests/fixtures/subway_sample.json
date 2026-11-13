@@ -1,0 +1,82 @@
+{
+ "errorMessage": {
+  "status": 200,
+  "code": "INFO-000",
+  "message": "정상 처리되었습니다.",
+  "link": "",
+  "developerMessage": "",
+  "total": 7
+ },
+ "realtimeArrivalList": [
+  {
+   "subwayId": "1002",
+   "updnLine": "외선",
+   "trainLineNm": "성수행 - 합정방면",
+   "statnNm": "홍대입구",
+   "barvlDt": "120",
+   "arvlMsg2": "2분 후",
+   "arvlMsg3": "",
+   "arvlCd": "99"
+  },
+  {
+   "subwayId": "1002",
+   "updnLine": "외선",
+   "trainLineNm": "신도림행 - 합정방면",
+   "statnNm": "홍대입구",
+   "barvlDt": "300",
+   "arvlMsg2": "5분 후",
+   "arvlMsg3": "",
+   "arvlCd": "99"
+  },
+  {
+   "subwayId": "1002",
+   "updnLine": "외선",
+   "trainLineNm": "성수행 - 합정방면",
+   "statnNm": "홍대입구",
+   "barvlDt": "540",
+   "arvlMsg2": "9분 후",
+   "arvlMsg3": "",
+   "arvlCd": "99"
+  },
+  {
+   "subwayId": "1002",
+   "updnLine": "내선",
+   "trainLineNm": "성수행 - 신촌방면",
+   "statnNm": "홍대입구",
+   "barvlDt": "60",
+   "arvlMsg2": "전역 도착",
+   "arvlMsg3": "",
+   "arvlCd": "99"
+  },
+  {
+   "subwayId": "1065",
+   "updnLine": "상행",
+   "trainLineNm": "서울역행 - 공덕방면",
+   "statnNm": "홍대입구",
+   "barvlDt": "240",
+   "arvlMsg2": "4분 후",
+   "arvlMsg3": "",
+   "arvlCd": "99"
+  },
+  {
+   "subwayId": "1063",
+   "updnLine": "하행",
+   "trainLineNm": "문산행 - 가좌방면",
+   "statnNm": "홍대입구",
+   "barvlDt": "660",
+   "arvlMsg2": "11분 후",
+   "arvlMsg3": "",
+   "arvlCd": "99"
+  },
+  {
+   "subwayId": "1063",
+   "updnLine": "상행",
+   "trainLineNm": "용문행 - 서강대방면",
+   "statnNm": "홍대입구",
+   "barvlDt": "0",
+   "arvlMsg2": "[3]번째 전역 (가좌)",
+   "arvlMsg3": "",
+   "arvlCd": "99"
+  }
+ ]
+}

@@ -1,0 +1,25 @@
+[project]
+name = "seoul-commute-mcp"
+version = "0.1.0"
+description = "Seoul commute assistant: weather, air quality and subway arrivals from Korean public data, served over MCP."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "httpx>=0.27",
+    "python-dotenv>=1.0",
+    "mcp[cli]>=2",
+]
+
+[dependency-groups]
+dev = ["pytest>=8"]
+# Only the briefing's LLM writer needs these; the Cloud Run image skips them.
+llm = ["anthropic>=2.8.0", "google-genai>=3.2.0"]
+
+[tool.uv]
+# Local `uv run` / `uv sync` install everything, as before.
+default-groups = ["dev", "llm"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-q"

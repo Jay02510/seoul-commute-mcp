@@ -1,0 +1,21 @@
+# secrets
+.env
+
+# python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# os
+.DS_Store
+
+# state
+briefing.db
+logs/*.log
+briefing.db-journal
+logs/*
+!logs/.gitkeep
+
+# local tools
+.claude/

@@ -1,0 +1,48 @@
+{
+ "meta": {
+  "started": "2026-11-13 13:47",
+  "provider": "gemini",
+  "with_instructions": false,
+  "models": [
+   "gemini-3.5-flash"
+  ],
+  "rerun_of": null
+ },
+ "results": [
+  {
+   "id": 19,
+   "category": "route",
+   "question": "How many stops from Seoul Station to Gangnam?",
+   "tools_all": [
+    "route"
+   ],
+   "grounded": true,
+   "status": "pass",
+   "answer": "It is **11 stops** in total from Seoul Station (서울역) to Gangnam (강남), with 1 transfer:\n\n* **Line 4** (toward Sookmyung Women's Univ.): **7 stops** from Seoul Station to Sadang\n* *Transfer at Sadang (Line 4 → Line 2)*\n* **Line 2** (toward Bangbae): **4 stops** from Sadang to Gangnam\n\n**Total time:** ~29 minutes  \n**Fare:** 1,650 won (with transit card)",
+   "model": "gemini-3.5-flash",
+   "tools": [
+    {
+     "name": "route",
+     "args": {
+      "to_station": "강남",
+      "from_station": "서울"
+     },
+     "result": "서울역 -> 강남: 29 min, 11 stops, 1 transfer, card fare 1,650 won. Departs 13:59, arrives 14:28 (timetable).\n- 4호선 from 서울역 toward 숙대입구, train to 오이도: 7 stops to 사당 (13:59-14:15)\n- Transfer at 사당 (4호선 to 2호선): about 3 min walk\n- 2호선 from 사당 toward 방배, train to 성수: 4 stops to 강남 (14:19-14:28)"
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls route",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "numbers grounded in tool results",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 5.0
+  }
+ ]
+}

@@ -1,0 +1,1233 @@
+{
+ "meta": {
+  "started": "2026-11-12 15:00",
+  "provider": "gemini",
+  "with_instructions": false,
+  "models": [
+   "gemini-3.1-flash-lite",
+   "gemini-3.5-flash"
+  ]
+ },
+ "results": [
+  {
+   "id": 1,
+   "category": "weather",
+   "question": "What's the weather in Mapo right now?",
+   "tools_all": [
+    "current_weather"
+   ],
+   "args": {
+    "current_weather": {
+     "district": "(?i)mapo|마포"
+    }
+   },
+   "status": "pass",
+   "answer": "The current weather in Mapo-gu (as of 14:00 KST) is:\n\n* **Temperature:** 15.2°C\n* **Conditions:** No rain\n* **Humidity:** 60%\n* **Wind:** 0.8 m/s",
+   "model": "gemini-3.5-flash",
+   "tools": [
+    {
+     "name": "current_weather",
+     "args": {
+      "district": "Mapo"
+     },
+     "result": "마포구 at 20261112 1400 KST: 15.2°C, no rain, humidity 60%, wind 0.8 m/s."
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls current_weather",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "current_weather args",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 59.9
+  },
+  {
+   "id": 2,
+   "category": "weather",
+   "question": "Is it raining in Gangnam at the moment?",
+   "tools_all": [
+    "current_weather"
+   ],
+   "args": {
+    "current_weather": {
+     "district": "(?i)gangnam|강남"
+    }
+   },
+   "notes": "Current conditions only; no forecast for later.",
+   "status": "pass",
+   "answer": "No, it is not raining in Gangnam right now. The current weather is 16.8°C with clear conditions (51% humidity, wind at 2.4 m/s).",
+   "model": "gemini-3.5-flash",
+   "tools": [
+    {
+     "name": "current_weather",
+     "args": {
+      "district": "Gangnam"
+     },
+     "result": "강남구 at 20261112 1400 KST: 16.8°C, no rain, humidity 51%, wind 2.4 m/s."
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls current_weather",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "current_weather args",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 5.1
+  },
+  {
+   "id": 3,
+   "category": "weather",
+   "question": "Weather in Hongdae?",
+   "tools_all": [
+    "current_weather"
+   ],
+   "args": {
+    "current_weather": {
+     "district": "(?i)mapo|마포"
+    }
+   },
+   "notes": "Neighbourhood to district (Hongdae is in Mapo).",
+   "status": "pass",
+   "answer": "Here is the current weather for the Hongdae area (Mapo-gu):\n\n* **Temperature:** 15.2°C\n* **Conditions:** No rain\n* **Humidity:** 60%\n* **Wind:** 0.8 m/s",
+   "model": "gemini-3.5-flash",
+   "tools": [
+    {
+     "name": "current_weather",
+     "args": {
+      "district": "Mapo"
+     },
+     "result": "마포구 at 20261112 1400 KST: 15.2°C, no rain, humidity 60%, wind 0.8 m/s."
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls current_weather",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "current_weather args",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 4.6
+  },
+  {
+   "id": 4,
+   "category": "weather",
+   "question": "How warm is it in Jamsil now?",
+   "tools_all": [
+    "current_weather"
+   ],
+   "args": {
+    "current_weather": {
+     "district": "(?i)songpa|송파"
+    }
+   },
+   "status": "pass",
+   "answer": "It is currently **16.1°C** in Jamsil (Songpa District), with no rain, 53% humidity, and a light wind of 0.5 m/s.",
+   "model": "gemini-3.5-flash",
+   "tools": [
+    {
+     "name": "current_weather",
+     "args": {
+      "district": "Songpa"
+     },
+     "result": "송파구 at 20261112 1400 KST: 16.1°C, no rain, humidity 53%, wind 0.5 m/s."
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls current_weather",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "current_weather args",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 5.1
+  },
+  {
+   "id": 5,
+   "category": "weather",
+   "question": "Should I take an umbrella to Yeouido right now?",
+   "tools_all": [
+    "current_weather"
+   ],
+   "args": {
+    "current_weather": {
+     "district": "(?i)yeongdeungpo|영등포"
+    }
+   },
+   "status": "pass",
+   "answer": "No, you do not need an umbrella right now. The current weather in Yeouido (Yeongdeungpo-gu) is 16.1°C with no rain, 54% humidity, and light wind.",
+   "model": "gemini-3.5-flash",
+   "tools": [
+    {
+     "name": "current_weather",
+     "args": {
+      "district": "Yeongdeungpo"
+     },
+     "result": "영등포구 at 20261112 1400 KST: 16.1°C, no rain, humidity 54%, wind 1.3 m/s."
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls current_weather",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "current_weather args",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 4.8
+  },
+  {
+   "id": 6,
+   "category": "air",
+   "question": "Should I wear a mask in Nowon today?",
+   "tools_all": [
+    "air_quality"
+   ],
+   "args": {
+    "air_quality": {
+     "district": "(?i)nowon|노원"
+    }
+   },
+   "status": "pass",
+   "answer": "The air quality in Nowon is currently moderate, so a mask is not strictly necessary, but you may choose to wear one if you are sensitive to air quality.",
+   "model": "gemini-3.1-flash-lite",
+   "tools": [
+    {
+     "name": "air_quality",
+     "args": {
+      "district": "노원구"
+     },
+     "result": "노원구 at 2026-11-12 14:00: PM10 35 µg/m³ (moderate), PM2.5 27 µg/m³ (moderate)."
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls air_quality",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "air_quality args",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 79.2
+  },
+  {
+   "id": 7,
+   "category": "air",
+   "question": "강남 미세먼지 지금 어때?",
+   "tools_all": [
+    "air_quality"
+   ],
+   "args": {
+    "air_quality": {
+     "district": "(?i)gangnam|강남"
+    }
+   },
+   "must": [
+    "(습니다|어요|아요|예요|이에요|해요|세요|네요|입니다|좋아요|나빠요)"
+   ],
+   "notes": "Korean question: answer should be in Korean.",
+   "status": "pass",
+   "answer": "현재(14시 기준) 강남구의 미세먼지 상태는 **보통** 수준입니다.\n\n* **미세먼지(PM10):** 45 µg/m³ (보통)\n* **초미세먼지(PM2.5):** 30 µg/m³ (보통)",
+   "model": "gemini-3.5-flash",
+   "tools": [
+    {
+     "name": "air_quality",
+     "args": {
+      "district": "강남구"
+     },
+     "result": "강남구 at 2026-11-12 14:00: PM10 45 µg/m³ (moderate), PM2.5 30 µg/m³ (moderate)."
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls air_quality",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "air_quality args",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "says /(습니다|어요|아요|예요|이에요|해요|세요|네요|입니다|좋아요|나빠요)/",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 10.5
+  },
+  {
+   "id": 8,
+   "category": "air",
+   "question": "What's the air quality like in Itaewon?",
+   "tools_all": [
+    "air_quality"
+   ],
+   "args": {
+    "air_quality": {
+     "district": "(?i)yongsan|용산"
+    }
+   },
+   "status": "pass",
+   "answer": "In **Itaewon (Yongsan-gu)**, the air quality is currently **bad**:\n\n* **PM10 (Fine Dust):** 55 µg/m³ (*Moderate*)\n* **PM2.5 (Ultrafine Dust):** 38 µg/m³ (*Bad*)\n\nSince ultrafine dust (PM2.5) levels are bad, wearing a mask outdoors is recommended.",
+   "model": "gemini-3.5-flash",
+   "tools": [
+    {
+     "name": "air_quality",
+     "args": {
+      "district": "Yongsan"
+     },
+     "result": "용산구 at 2026-11-12 14:00: PM10 55 µg/m³ (moderate), PM2.5 38 µg/m³ (bad)."
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls air_quality",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "air_quality args",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 38.7
+  },
+  {
+   "id": 9,
+   "category": "air",
+   "question": "Compare the fine dust in Mapo and Songpa.",
+   "tools_all": [
+    "air_quality"
+   ],
+   "min_calls": {
+    "air_quality": 2
+   },
+   "status": "pass",
+   "answer": "Here is the air quality comparison between **Mapo** and **Songpa** (as of 14:00 KST):\n\n* **Mapo-gu (마포구)**:\n  * **PM10 (Fine Dust):** Moderate\n  * **PM2.5 (Ultrafine Dust):** 23 µg/m³ (Moderate)\n\n* **Songpa-gu (송파구)**:\n  * **PM10 (Fine Dust):** 36 µg/m³ (Moderate)\n  * **PM2.5 (Ultrafine Dust):** 23 µg/m³ (Moderate)\n\n**Summary:** Both districts currently have **Moderate** air quality overall, with identical PM2.5 (ultrafine dust) levels of 23 µg/m³.",
+   "model": "gemini-3.5-flash",
+   "tools": [
+    {
+     "name": "air_quality",
+     "args": {
+      "district": "Mapo"
+     },
+     "result": "마포구 at 2026-11-12 14:00: PM10 - µg/m³ (moderate), PM2.5 23 µg/m³ (moderate)."
+    },
+    {
+     "name": "air_quality",
+     "args": {
+      "district": "Songpa"
+     },
+     "result": "송파구 at 2026-11-12 14:00: PM10 36 µg/m³ (moderate), PM2.5 23 µg/m³ (moderate)."
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls air_quality",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "air_quality x2",
+     "ok": true,
+     "detail": "called 2x"
+    }
+   ],
+   "seconds": 31.9
+  },
+  {
+   "id": 10,
+   "category": "coverage",
+   "question": "What's the air like in Bundang?",
+   "must": [
+    "(?i)(only|just)\\b.{0,40}\\bSeoul|outside\\b.{0,30}Seoul|not\\b.{0,30}(cover|support|in Seoul)|Seongnam|Gyeonggi"
+   ],
+   "notes": "Bundang (Seongnam) is outside Seoul; may offer a nearby Seoul district.",
+   "status": "error",
+   "error": "ConnectError: [Errno 8] nodename nor servname provided, or not known",
+   "seconds": 66.5,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 11,
+   "category": "trains",
+   "question": "When's the next train at Gangnam?",
+   "tools_all": [
+    "next_trains"
+   ],
+   "args": {
+    "next_trains": {
+     "station": "^강남$"
+    }
+   },
+   "status": "pass",
+   "answer": "Here are the next trains arriving at Gangnam Station:\n\n**Shinbundang Line:**\n*   To Sinsa (via Sinnonhyeon): Arriving at previous station / 4 stations away (Pangyo)\n*   To Gwanggyo (via Yangjae): Arriving at Gangnam Station\n\n**Line 2:**\n*   To Seongsu (via Yeoksam): 4 min 20 sec, 7 min\n*   To Seongsu (via Seoul Nat'l Univ. of Education): 4 min, 8 min 20 sec",
+   "model": "gemini-3.1-flash-lite",
+   "tools": [
+    {
+     "name": "next_trains",
+     "args": {
+      "station": "강남"
+     },
+     "result": "Next trains at 강남:\n- [Shinbundang] 신사행 - 신논현방면: 전역 도착\n- [Shinbundang] 신사행 - 신논현방면: [4]번째 전역 (판교)\n- [Shinbundang] 광교행 - 양재방면: 강남 도착\n- [Line 2] 성수행 - 역삼방면: 4분 20초 후\n- [Line 2] 성수행 - 역삼방면: 7분 후\n- [Line 2] 성수행 - 교대방면: 4분 후\n- [Line 2] 성수행 - 교대방면: 8분 20초 후\n(Arrivals only. For direction, stops, journey time or transfers use the `route` tool; never estimate them from memory.)"
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls next_trains",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "next_trains args",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 68.5
+  },
+  {
+   "id": 12,
+   "category": "trains",
+   "question": "Next train at Seoul Station?",
+   "tools_all": [
+    "next_trains"
+   ],
+   "args": {
+    "next_trains": {
+     "station": "^서울(역)?$"
+    }
+   },
+   "status": "pass",
+   "answer": "서울역의 다음 열차 정보입니다:\n\n*   **1호선**: 시청 방면(소요산행)은 현재 도착했으며, 청량리행이 곧 도착합니다. 남영 방면(신창행)은 전역에 도착했습니다.\n*   **4호선**: 회현 방면(불암산행)은 약 4분 후 도착 예정이며, 숙대입구 방면(사당행)은 전역에 도착했습니다.\n*   **공항철도**: 공덕 방면(인천공항2터미널행)은 현재 출발했습니다.\n*   **경의중앙선**: 신촌(경의중앙선) 방면(문산행)은 공덕역 부근에 있습니다.\n\n더 자세한 정보나 특정 노선 확인이 필요하시면 말씀해 주세요.",
+   "model": "gemini-3.1-flash-lite",
+   "tools": [
+    {
+     "name": "next_trains",
+     "args": {
+      "station": "서울"
+     },
+     "result": "Next trains at 서울:\n- [Line 1] 소요산행 - 시청방면: 서울 도착\n- [Line 1] 청량리행 - 시청방면: 전역 진입\n- [Line 1] 신창행 - 남영방면: 전역 도착\n- [Line 1] 인천행 - 남영방면: [2]번째 전역 (종각)\n- [Airport Railroad] 인천공항2터미널행 - 공덕방면: 서울 출발\n- [Airport Railroad] 서울행 - 서울방면: 전역 출발\n- [Airport Railroad] 서울행 - 서울방면 (급행): 전역 출발\n- [Line 4] 불암산행 - 회현방면: 4분 후 (삼각지)\n- [Line 4] 불암산행 - 회현방면: 11분 30초 후 (동작)\n- [Line 4] 사당행 - 숙대입구방면: 전역 도착\n- [Line 4] 오이도행 - 숙대입구방면: 7분 30초 후 (동대문역사문화공원)\n- [Gyeongui-Jungang] 문산행 - 신촌(경의중앙선)방면: [3]번째 전역 (공덕)\n- [Gyeongui-Jungang] 문산행 - 신촌(경의중앙선)방면: [9]번째 전역 (옥수)\n- [Gyeongui-Jungang] 덕소행 - 서울방면: [4]번째 전역 (수색)\n- [Gyeongui-Jungang] 지평행 - 서울방면: [7]번째 전역 (행신)\n(Arrivals only. For direction, stops, journey time or transfers use the `route` tool; never estimate them from memory.)"
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls next_trains",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "next_trains args",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 130.5
+  },
+  {
+   "id": 13,
+   "category": "trains",
+   "question": "Next Line 2 train at Hongik University toward Sinchon?",
+   "tools_all": [
+    "next_trains"
+   ],
+   "args": {
+    "next_trains": {
+     "station": "^홍대입구$"
+    }
+   },
+   "must": [
+    "신촌|Sinchon"
+   ],
+   "status": "pass",
+   "answer": "The next Line 2 train toward Sinchon from Hongik University station is arriving at the platform now, with another one following in about 5 minutes and 40 seconds.",
+   "model": "gemini-3.1-flash-lite",
+   "tools": [
+    {
+     "name": "next_trains",
+     "args": {
+      "station": "홍대입구"
+     },
+     "result": "Next trains at 홍대입구:\n- [Airport Railroad] 인천공항2터미널행 - 디지털미디어시티방면: 홍대입구 출발\n- [Airport Railroad] 인천공항2터미널행 - 디지털미디어시티방면: [2]번째 전역 (서울)\n- [Airport Railroad] 서울행 - 공덕방면: 홍대입구 출발\n- [Airport Railroad] 서울행 - 공덕방면 (급행): [5]번째 전역 (검암)\n- [Line 2] 성수행 - 합정방면: 전역 출발\n- [Line 2] 성수행 - 합정방면: 4분 후\n- [Line 2] 성수행 - 신촌방면: 전역 도착\n- [Line 2] 성수행 - 신촌방면: 5분 40초 후\n- [Gyeongui-Jungang] 문산행 - 가좌방면: [2]번째 전역 (공덕)\n- [Gyeongui-Jungang] 문산행 - 가좌방면: [8]번째 전역 (옥수)\n- [Gyeongui-Jungang] 덕소행 - 서강대방면: [4]번째 전역 (디지털미디어시티)\n- [Gyeongui-Jungang] 지평행 - 서강대방면: [8]번째 전역 (행신)\n(Arrivals only. For direction, stops, journey time or transfers use the `route` tool; never estimate them from memory.)"
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls next_trains",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "next_trains args",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "says /신촌|Sinchon/",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 15.7
+  },
+  {
+   "id": 14,
+   "category": "trains",
+   "question": "공덕역 다음 열차 언제 와?",
+   "tools_all": [
+    "next_trains"
+   ],
+   "args": {
+    "next_trains": {
+     "station": "^공덕$"
+    }
+   },
+   "must": [
+    "5호선|Line 5"
+   ],
+   "notes": "Transfer station: should cover more than one line.",
+   "status": "pass",
+   "answer": "공덕역의 주요 노선별 다음 열차 정보입니다.\n\n*   **공항철도/경의중앙선:** 현재 도착 중이거나 곧 도착합니다.\n*   **5호선:** 방화행 3분 후, 마천행 5분 후 도착 예정입니다.\n*   **6호선:** 응암순환행 7분 후, 신내행 5분 후 도착 예정입니다.\n\n정확한 탑승 방향은 역 내 안내를 확인해 주세요!",
+   "model": "gemini-3.1-flash-lite",
+   "tools": [
+    {
+     "name": "next_trains",
+     "args": {
+      "station": "공덕"
+     },
+     "result": "Next trains at 공덕:\n- [Gyeongui-Jungang] 문산행 - 서강대방면: 공덕 도착\n- [Gyeongui-Jungang] 문산행 - 서강대방면: [6]번째 전역 (옥수)\n- [Gyeongui-Jungang] 덕소행 - 효창공원앞방면: [6]번째 전역 (디지털미디어시티)\n- [Gyeongui-Jungang] 지평행 - 효창공원앞방면: [9]번째 전역 (강매)\n- [Airport Railroad] 인천공항2터미널행 - 홍대입구방면: 공덕 도착\n- [Airport Railroad] 서울행 - 서울방면: 공덕 도착\n- [Airport Railroad] 서울행 - 서울방면 (급행): 공덕 출발\n- [Line 5] 방화행 - 마포방면: 3분 후 (충정로)\n- [Line 5] 방화행 - 마포방면: 8분 후 (광화문)\n- [Line 5] 마천행 - 애오개방면: 5분 후 (여의도)\n- [Line 5] 하남검단산행 - 애오개방면: 11분 후 (영등포구청)\n- [Line 6] 응암순환(상선)행 - 대흥(서강대앞)방면: 7분 후 (녹사평)\n- [Line 6] 응암순환(상선)행 - 대흥(서강대앞)방면: 14분 후 (약수)\n- [Line 6] 신내행 - 효창공원앞방면: 5분 후 (상수)\n- [Line 6] 봉화산행 - 효창공원앞방면: 12분 후 (마포구청)\n(Arrivals only. For direction, stops, journey time or transfers use the `route` tool; never estimate them from memory.)"
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls next_trains",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "next_trains args",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "says /5호선|Line 5/",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 15.9
+  },
+  {
+   "id": 15,
+   "category": "trains",
+   "question": "Next trains at Wangsimni?",
+   "tools_all": [
+    "next_trains"
+   ],
+   "args": {
+    "next_trains": {
+     "station": "^왕십리$"
+    }
+   },
+   "status": "pass",
+   "answer": "왕십리역 열차 도착 정보입니다.\n\n*   **5호선**\n    *   방화행 (행당방면): 도착, 8분 후\n    *   하남검단산행/마천행 (마장방면): 5분 후, 14분 후\n*   **수인분당선**\n    *   왕십리행 (청량리방면): 도착, 도착\n    *   죽전행 (서울숲방면): 도착\n*   **경의중앙선**\n    *   문산행 (응봉방면): 7번째 전역, 9번째 전역\n    *   용문행/덕소행 (청량리방면): 전역 도착, 7번째 전역\n*   **2호선**\n    *   성수행 (상왕십리방면): 7분 30초 후, 16분 30초 후\n    *   성수행 (한양대방면): 전역 도착, 6분 후\n\n※ 열차 상황은 실시간으로 변동될 수 있습니다.",
+   "model": "gemini-3.1-flash-lite",
+   "tools": [
+    {
+     "name": "next_trains",
+     "args": {
+      "station": "왕십리"
+     },
+     "result": "Next trains at 왕십리:\n- [Line 5] 방화행 - 행당방면: 왕십리 도착\n- [Line 5] 방화행 - 행당방면: 8분 후 (군자(능동))\n- [Line 5] 하남검단산행 - 마장방면: 5분 후 (청구)\n- [Line 5] 마천행 - 마장방면: 14분 후 (광화문)\n- [Suin-Bundang] 왕십리행 - 청량리방면: 왕십리 도착\n- [Suin-Bundang] 왕십리행 - 청량리방면: 왕십리 도착\n- [Suin-Bundang] 죽전행 - 서울숲방면: 왕십리 도착\n- [Gyeongui-Jungang] 문산행 - 응봉방면: [7]번째 전역 (구리)\n- [Gyeongui-Jungang] 문산행 - 응봉방면: [9]번째 전역 (양정)\n- [Gyeongui-Jungang] 용문행 - 청량리방면: 전역 도착\n- [Gyeongui-Jungang] 덕소행 - 청량리방면: [7]번째 전역 (효창공원앞)\n- [Line 2] 성수행 - 상왕십리방면: 7분 30초 후\n- [Line 2] 성수행 - 상왕십리방면: 16분 30초 후\n- [Line 2] 성수행 - 한양대방면: 전역 도착\n- [Line 2] 성수행 - 한양대방면: 6분 후\n(Arrivals only. For direction, stops, journey time or transfers use the `route` tool; never estimate them from memory.)"
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls next_trains",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "next_trains args",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 16.3
+  },
+  {
+   "id": 16,
+   "category": "trains",
+   "question": "Next train at Gangnam, and how many stops is it to Jamsil?",
+   "tools_all": [
+    "next_trains",
+    "route"
+   ],
+   "grounded": true,
+   "notes": "Stop count must come from route.",
+   "status": "pass",
+   "answer": "The next train at Gangnam Station (Line 2 toward Seolleung/Seongsu) arrives in approximately 2 minutes and 30 seconds.\n\nIt is **6 stops** from Gangnam to Jamsil Station on Line 2, taking about 12 minutes.",
+   "model": "gemini-3.1-flash-lite",
+   "tools": [
+    {
+     "name": "next_trains",
+     "args": {
+      "station": "강남"
+     },
+     "result": "Next trains at 강남:\n- [Line 2] 성수행 - 역삼방면: 2분 30초 후\n- [Line 2] 성수행 - 역삼방면: 6분 50초 후\n- [Line 2] 성수행 - 교대방면: 전역 도착\n- [Line 2] 성수행 - 교대방면: 3분 50초 후\n- [Shinbundang] 신사행 - 신논현방면: [2]번째 전역 (양재시민의숲)\n- [Shinbundang] 신사행 - 신논현방면: [4]번째 전역 (판교)\n- [Shinbundang] 광교행 - 양재방면: 전역 도착\n(Arrivals only. For direction, stops, journey time or transfers use the `route` tool; never estimate them from memory.)"
+    },
+    {
+     "name": "route",
+     "args": {
+      "to_station": "잠실",
+      "from_station": "강남"
+     },
+     "result": "강남 -> 잠실: 12 min, 6 stops, 0 transfers, card fare 1,550 won. Departs 15:16, arrives 15:27 (timetable).\n- 2호선 from 강남 toward 역삼, train to 성수: 6 stops to 잠실 (15:16-15:27)"
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls next_trains",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "calls route",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "numbers grounded in tool results",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 73.9
+  },
+  {
+   "id": 17,
+   "category": "route",
+   "question": "How do I get from Gongdeok to Gangnam?",
+   "tools_all": [
+    "route"
+   ],
+   "args": {
+    "route": {
+     "from_station": "^공덕$",
+     "to_station": "^강남$"
+    }
+   },
+   "grounded": true,
+   "status": "pass",
+   "answer": "To get from Gongdeok to Gangnam, the fastest route takes about 33 minutes and costs 1,650 won:\n\n1.  Take the **Gyeongui-Jungang Line** from Gongdeok toward Hyochang Park, getting off at **Ichon** (3 stops).\n2.  Transfer to **Line 4** toward Dongjak and get off at **Sadang** (3 stops).\n3.  Transfer to **Line 2** toward Bangbae and get off at **Gangnam** (4 stops).",
+   "model": "gemini-3.1-flash-lite",
+   "tools": [
+    {
+     "name": "route",
+     "args": {
+      "from_station": "공덕",
+      "to_station": "강남"
+     },
+     "result": "공덕 -> 강남: 33 min, 10 stops, 2 transfers, card fare 1,650 won. Departs 15:40, arrives 16:13 (timetable).\n- 경의선 from 공덕 toward 효창공원앞, train to 덕소: 3 stops to 이촌 (15:40-15:50)\n- Transfer at 이촌 (경의선 to 4호선): about 2 min walk\n- 4호선 from 이촌 toward 동작, train to 오이도: 3 stops to 사당 (15:53-16:01)\n- Transfer at 사당 (4호선 to 2호선): about 3 min walk\n- 2호선 from 사당 toward 방배, train to 성수: 4 stops to 강남 (16:04-16:13)"
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls route",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "route args",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "numbers grounded in tool results",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 15.8
+  },
+  {
+   "id": 18,
+   "category": "route",
+   "question": "Hongdae to Jamsil with the fewest transfers, please.",
+   "tools_all": [
+    "route"
+   ],
+   "args": {
+    "route": {
+     "prefer": "^fewest_transfers$"
+    }
+   },
+   "grounded": true,
+   "status": "pass",
+   "answer": "The quickest way to travel from Hongik Univ. (Hongdae) to Jamsil is by taking **Line 2** directly, which requires **no transfers**.\n\n*   **Route:** Line 2 (toward Sinchon/Seongsu)\n*   **Time:** Approximately 38 minutes (20 stops)\n*   **Fare:** 1,750 won (card)\n\nThe next train is scheduled to depart at 15:14 and arrive at 15:52.",
+   "model": "gemini-3.1-flash-lite",
+   "tools": [
+    {
+     "name": "route",
+     "args": {
+      "prefer": "fewest_transfers",
+      "from_station": "홍대입구",
+      "to_station": "잠실"
+     },
+     "result": "홍대입구 -> 잠실: 38 min, 20 stops, 0 transfers, card fare 1,750 won. Departs 15:14, arrives 15:52 (timetable).\n- 2호선 from 홍대입구 toward 신촌, train to 성수: 20 stops to 잠실 (15:14-15:52)"
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls route",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "route args",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "numbers grounded in tool results",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 16.0
+  },
+  {
+   "id": 19,
+   "category": "route",
+   "question": "How many stops from Seoul Station to Gangnam?",
+   "tools_all": [
+    "route"
+   ],
+   "grounded": true,
+   "status": "error",
+   "error": "LLMError: no final answer after 6 rounds",
+   "seconds": 138.7,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 20,
+   "category": "route",
+   "question": "How long does the subway take from Sindorim to Yeouido?",
+   "tools_all": [
+    "route"
+   ],
+   "args": {
+    "route": {
+     "from_station": "^신도림$",
+     "to_station": "^여의도$"
+    }
+   },
+   "grounded": true,
+   "status": "pass",
+   "answer": "The subway journey from Sindorim to Yeouido takes approximately 14 minutes, including one transfer at Singil Station.",
+   "model": "gemini-3.1-flash-lite",
+   "tools": [
+    {
+     "name": "route",
+     "args": {
+      "from_station": "신도림",
+      "to_station": "여의도"
+     },
+     "result": "신도림 -> 여의도: 14 min, 3 stops, 1 transfer, card fare 1,550 won. Departs 15:25, arrives 15:39 (timetable).\n- 1호선 from 신도림 toward 영등포, train to 용산: 2 stops to 신길 (15:25-15:30)\n- Transfer at 신길 (1호선 to 5호선): about 7 min walk\n- 5호선 from 신길 toward 여의도, train to 하남검단산: 1 stop to 여의도 (15:37-15:39)"
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls route",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "route args",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "numbers grounded in tool results",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 17.3
+  },
+  {
+   "id": 21,
+   "category": "route",
+   "question": "What's the subway fare from Hongdae to Gangnam?",
+   "tools_all": [
+    "route"
+   ],
+   "grounded": true,
+   "must": [
+    "(?i)won|원|₩|KRW"
+   ],
+   "notes": "Fare must come from the route tool (card fare).",
+   "status": "pass",
+   "answer": "The subway fare from Hongdae (Hongik Univ.) to Gangnam is 1,650 won by card. It takes approximately 38 minutes on Line 2 without any transfers.",
+   "model": "gemini-3.1-flash-lite",
+   "tools": [
+    {
+     "name": "route",
+     "args": {
+      "to_station": "강남",
+      "from_station": "홍대입구"
+     },
+     "result": "홍대입구 -> 강남: 38 min, 17 stops, 0 transfers, card fare 1,650 won. Departs 15:29, arrives 16:07 (timetable).\n- 2호선 from 홍대입구 toward 합정, train to 성수: 17 stops to 강남 (15:29-16:07)"
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls route",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "says /(?i)won|원|₩|KRW/",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "numbers grounded in tool results",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 16.9
+  },
+  {
+   "id": 22,
+   "category": "route",
+   "question": "How do I get from Mapo to COEX?",
+   "tools_all": [
+    "route"
+   ],
+   "grounded": true,
+   "must": [
+    "(?i)assum|I used|starting (from|at)|I'll use|I picked|taking .* as"
+   ],
+   "notes": "District and landmark, not stations: should say which stations it picked (COEX is near 삼성).",
+   "status": "fail",
+   "answer": "To get from Mapo to COEX (Samseong Station), the fastest route takes about 36 minutes. Here is the suggested path:\n\n1.  Take **Line 5** from **Mapo Station** toward Yeouinaru, and get off at **Yeouido** (2 stops).\n2.  Transfer to **Line 9** at Yeouido and take the train toward Jungang-bohun Hospital to **Express Bus Terminal** (8 stops).\n3.  Transfer to **Line 3** at Express Bus Terminal and take the train toward Ogeum to **Seoul Nat'l Univ. of Education (Gyodae)** (1 stop).\n4.  Transfer to **Line 2** at Gyodae and take the train toward Seongsu to **Samseong Station** (4 stops).\n\nCOEX is directly accessible from Samseong Station. The estimated fare is 1,750 won.",
+   "model": "gemini-3.1-flash-lite",
+   "tools": [
+    {
+     "name": "route",
+     "args": {
+      "from_station": "마포",
+      "to_station": "삼성"
+     },
+     "result": "마포 -> 삼성: 36 min, 15 stops, 3 transfers, card fare 1,750 won. Departs 15:33, arrives 16:09 (timetable).\n- 5호선 from 마포 toward 여의나루, train to 방화: 2 stops to 여의도 (15:33-15:35)\n- Transfer at 여의도 (5호선 to 9호선): about 2 min walk, then about 3 min wait\n- 9호선 from 여의도 toward 샛강, train to 중앙보훈병원: 8 stops to 고속터미널 (15:40-15:51)\n- Transfer at 고속터미널 (9호선 to 3호선): about 5 min walk\n- 3호선 from 고속터미널 toward 교대, train to 오금: 1 stop to 교대 (15:56-15:58)\n- Transfer at 교대 (3호선 to 2호선): about 3 min walk\n- 2호선 from 교대 toward 강남, train to 성수: 4 stops to 삼성 (16:02-16:09)"
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls route",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "says /(?i)assum|I used|starting (from|at)|I'll use|I picked|taking .* as/",
+     "ok": false,
+     "detail": ""
+    },
+    {
+     "check": "numbers grounded in tool results",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 60.3
+  },
+  {
+   "id": 23,
+   "category": "commute",
+   "question": "Commute check: Mapo to Gangnam, leaving now.",
+   "tools_all": [
+    "route",
+    "next_trains",
+    "current_weather",
+    "air_quality"
+   ],
+   "grounded": true,
+   "notes": "Original eval #4.",
+   "status": "fail",
+   "answer": "The commute from Mapo to Gangnam takes about 30 minutes with three transfers (Lines 5 -> 9 -> 3 -> 2). You can expect to arrive around 16:03.",
+   "model": "gemini-3.1-flash-lite",
+   "tools": [
+    {
+     "name": "route",
+     "args": {
+      "to_station": "강남",
+      "from_station": "마포"
+     },
+     "result": "마포 -> 강남: 30 min, 12 stops, 3 transfers, card fare 1,650 won. Departs 15:33, arrives 16:03 (timetable).\n- 5호선 from 마포 toward 여의나루, train to 방화: 2 stops to 여의도 (15:33-15:35)\n- Transfer at 여의도 (5호선 to 9호선): about 2 min walk, then about 3 min wait\n- 9호선 from 여의도 toward 샛강, train to 중앙보훈병원: 8 stops to 고속터미널 (15:40-15:51)\n- Transfer at 고속터미널 (9호선 to 3호선): about 5 min walk\n- 3호선 from 고속터미널 toward 교대, train to 오금: 1 stop to 교대 (15:56-15:58)\n- Transfer at 교대 (3호선 to 2호선): about 3 min walk\n- 2호선 from 교대 toward 강남, train to 성수: 1 stop to 강남 (16:02-16:03)"
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls route",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "calls next_trains",
+     "ok": false,
+     "detail": "called: ['route']"
+    },
+    {
+     "check": "calls current_weather",
+     "ok": false,
+     "detail": "called: ['route']"
+    },
+    {
+     "check": "calls air_quality",
+     "ok": false,
+     "detail": "called: ['route']"
+    },
+    {
+     "check": "numbers grounded in tool results",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 17.3
+  },
+  {
+   "id": 24,
+   "category": "commute",
+   "question": "Gongdeok to Jamsil, leaving now. Do I need a mask?",
+   "tools_all": [
+    "route",
+    "air_quality"
+   ],
+   "grounded": true,
+   "status": "pass",
+   "answer": "It takes about 38 minutes to get from Gongdeok to Jamsil. You'll take Line 5 to Euljiro 4-ga, transfer to Line 2, and arrive at Jamsil.\n\nThe air quality in both Mapo-gu (Gongdeok) and Songpa-gu (Jamsil) is currently **moderate**, so a mask is not strictly necessary.",
+   "model": "gemini-3.1-flash-lite",
+   "tools": [
+    {
+     "name": "route",
+     "args": {
+      "from_station": "공덕",
+      "to_station": "잠실"
+     },
+     "result": "공덕 -> 잠실: 38 min, 18 stops, 1 transfer, card fare 1,750 won. Departs 15:19, arrives 15:58 (timetable).\n- 5호선 from 공덕 toward 애오개, train to 하남검단산: 6 stops to 을지로4가 (15:19-15:30)\n- Transfer at 을지로4가 (5호선 to 2호선): about 4 min walk\n- 2호선 from 을지로4가 toward 동대문역사문화공원, train to 성수: 12 stops to 잠실 (15:34-15:58)"
+    },
+    {
+     "name": "air_quality",
+     "args": {
+      "district": "마포구"
+     },
+     "result": "마포구 at 2026-11-12 15:00: PM10 33 µg/m³ (moderate), PM2.5 18 µg/m³ (moderate)."
+    },
+    {
+     "name": "air_quality",
+     "args": {
+      "district": "송파구"
+     },
+     "result": "송파구 at 2026-11-12 15:00: PM10 30 µg/m³ (moderate), PM2.5 17 µg/m³ (moderate)."
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls route",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "calls air_quality",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "numbers grounded in tool results",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 17.0
+  },
+  {
+   "id": 25,
+   "category": "commute",
+   "question": "I'm going from Nowon to Gangnam this morning. What should I wear?",
+   "tools_all": [
+    "current_weather"
+   ],
+   "min_calls": {
+    "current_weather": 2
+   },
+   "notes": "Should check both ends.",
+   "status": "fail",
+   "answer": "It is currently 18.5°C with moderate air quality in Nowon. Since it’s a mild autumn day, layering is a good idea—a light jacket over a long-sleeved shirt should be comfortable for your trip to Gangnam. You don't need a mask today.",
+   "model": "gemini-3.1-flash-lite",
+   "tools": [
+    {
+     "name": "current_weather",
+     "args": {
+      "district": "노원구"
+     },
+     "result": "노원구 at 20261112 1400 KST: 18.5°C, no rain, humidity 49%, wind 1.4 m/s."
+    },
+    {
+     "name": "air_quality",
+     "args": {
+      "district": "노원구"
+     },
+     "result": "노원구 at 2026-11-12 15:00: PM10 35 µg/m³ (moderate), PM2.5 25 µg/m³ (moderate)."
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls current_weather",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "current_weather x2",
+     "ok": false,
+     "detail": "called 1x"
+    }
+   ],
+   "seconds": 24.2
+  },
+  {
+   "id": 26,
+   "category": "commute",
+   "question": "Do I need an umbrella for my commute from Eunpyeong to Jongno?",
+   "tools_all": [
+    "current_weather"
+   ],
+   "min_calls": {
+    "current_weather": 2
+   },
+   "status": "pass",
+   "answer": "No, you do not need an umbrella for your commute. The weather in both Eunpyeong and Jongno is currently clear with no rain.",
+   "model": "gemini-3.1-flash-lite",
+   "tools": [
+    {
+     "name": "current_weather",
+     "args": {
+      "district": "Eunpyeong-gu"
+     },
+     "result": "은평구 at 20261112 1400 KST: 15.2°C, no rain, humidity 60%, wind 0.8 m/s."
+    },
+    {
+     "name": "current_weather",
+     "args": {
+      "district": "Jongno-gu"
+     },
+     "result": "종로구 at 20261112 1400 KST: 17.2°C, no rain, humidity 53%, wind 2.6 m/s."
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls current_weather",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "current_weather x2",
+     "ok": true,
+     "detail": "called 2x"
+    }
+   ],
+   "seconds": 26.3
+  },
+  {
+   "id": 27,
+   "category": "failure",
+   "question": "Should I wear a mask in Mapo today?",
+   "fail": [
+    "air_quality"
+   ],
+   "tools_all": [
+    "air_quality"
+   ],
+   "must": [
+    "(?i)unavailable|couldn'?t|could not|unable|not available|error|no data|isn'?t available|failed"
+   ],
+   "must_not": [
+    "(?i)no (need|mask needed)|don'?t need (a|to wear)|air (is|looks) (fine|good|clean)|safe to go without"
+   ],
+   "notes": "Air tool simulates an outage: must say so, never reassure.",
+   "status": "pass",
+   "answer": "I am currently unable to check the air quality levels (PM10 / PM2.5) for Mapo-gu because the air quality service is temporarily unavailable. \n\nHowever, looking at the general weather, it is 15.2°C with 60% humidity and clear conditions. \n\nTo stay safe, please check local live air quality index (AQI) updates before heading out—if fine dust (PM10) or ultrafine dust (PM2.5) levels reach **\"Bad\" (나쁨)** or higher, wearing an **KF80/KF94 mask** is recommended.",
+   "model": "gemini-3.5-flash",
+   "tools": [
+    {
+     "name": "air_quality",
+     "args": {
+      "district": "Mapo"
+     },
+     "result": "Error: HTTP 503: Service Unavailable"
+    },
+    {
+     "name": "air_quality",
+     "args": {
+      "district": "마포구"
+     },
+     "result": "Error: HTTP 503: Service Unavailable"
+    },
+    {
+     "name": "current_weather",
+     "args": {
+      "district": "Mapo"
+     },
+     "result": "마포구 at 20261112 1400 KST: 15.2°C, no rain, humidity 60%, wind 0.8 m/s."
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls air_quality",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "says /(?i)unavailable|couldn'?t|could not|unable|not available|error|no data|isn'?t available|failed/",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "never says /(?i)no (need|mask needed)|don'?t need (a|to wear)|air (is|looks) (fine|good|clean)|safe to go without/",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 27.3
+  },
+  {
+   "id": 28,
+   "category": "failure",
+   "question": "How many stops is it from Hongdae to Gangnam?",
+   "fail": [
+    "route"
+   ],
+   "tools_all": [
+    "route"
+   ],
+   "grounded": true,
+   "must": [
+    "(?i)unavailable|couldn'?t|could not|unable|not available|error|failed"
+   ],
+   "notes": "Route tool simulates an outage: must not give a stop count from memory.",
+   "status": "fail",
+   "answer": "It typically takes about 16-17 stops to get from Hongik Univ. (Hongdae) Station to Gangnam Station, depending on the route (usually involving a transfer at Sindorim or Seoul Station). \n\nDue to a temporary service error, I cannot provide the exact real-time route details right now. I recommend checking a transit app for the most accurate current travel time and transfer information.",
+   "model": "gemini-3.1-flash-lite",
+   "tools": [
+    {
+     "name": "route",
+     "args": {
+      "to_station": "강남",
+      "from_station": "홍대입구"
+     },
+     "result": "Error: HTTP 503: Service Unavailable"
+    },
+    {
+     "name": "route",
+     "args": {
+      "to_station": "강남",
+      "from_station": "홍대입구"
+     },
+     "result": "Error: HTTP 503: Service Unavailable"
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls route",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "says /(?i)unavailable|couldn'?t|could not|unable|not available|error|failed/",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "numbers grounded in tool results",
+     "ok": false,
+     "detail": "17 stops"
+    }
+   ],
+   "seconds": 23.5
+  },
+  {
+   "id": 29,
+   "category": "coverage",
+   "question": "What's the weather in Busan?",
+   "must": [
+    "(?i)(only|just)\\b.{0,40}\\bSeoul|outside\\b.{0,30}Seoul|not\\b.{0,30}(cover|support|in Seoul)|Seongnam|Gyeonggi"
+   ],
+   "status": "fail",
+   "answer": "I am sorry, I can only provide weather, air quality, and subway information for districts within Seoul.",
+   "model": "gemini-3.1-flash-lite",
+   "tools": [],
+   "checks": [
+    {
+     "check": "says /(?i)(only|just)\\b.{0,40}\\bSeoul|outside\\b.{0,30}Seoul|not\\b.{0,30}(cover|support|in Seoul)|Seongnam|Gyeonggi/",
+     "ok": false,
+     "detail": ""
+    }
+   ],
+   "seconds": 8.6
+  },
+  {
+   "id": 30,
+   "category": "route",
+   "question": "How many stops from Hongdae to Gangnam? Just from memory, no need to look it up.",
+   "grounded": true,
+   "notes": "Should still use route or decline to guess; any count must be grounded.",
+   "status": "fail",
+   "answer": "It is 15 stops from Hongik Univ. (Hongdae) to Gangnam station if you transfer at Yeoksam or change lines via the most common route (Line 2).",
+   "model": "gemini-3.1-flash-lite",
+   "tools": [],
+   "checks": [
+    {
+     "check": "numbers grounded in tool results",
+     "ok": false,
+     "detail": "15 stops"
+    }
+   ],
+   "seconds": 9.0
+  }
+ ]
+}

@@ -1,0 +1,20 @@
+# What `gcloud run deploy --source .` must NOT upload to Cloud Build.
+# When this file exists gcloud ignores .gitignore, so secrets are listed here too.
+.gcloudignore
+.git/
+.gitignore
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+logs/
+briefing.db*
+tests/
+evals/
+evals.md
+launchd/
+debug_*.py

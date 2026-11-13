@@ -1,0 +1,153 @@
+{
+ "header": {
+  "resultCode": "00",
+  "resultMsg": "성공"
+ },
+ "body": {
+  "searchType": "duration",
+  "totalDstc": 5000,
+  "totalReqHr": 900,
+  "totalCardCrg": 1550,
+  "trsitNmtm": 1,
+  "trfstnNms": [
+   {
+    "stnNm": "삼각지"
+   }
+  ],
+  "exclTrfstns": [],
+  "thrghStns": [],
+  "schInclYn": "Y",
+  "paths": [
+   {
+    "dptreStn": {
+     "stnCd": "2629",
+     "stnNo": "629",
+     "stnNm": "공덕",
+     "lineNm": "6호선",
+     "brlnNm": null
+    },
+    "arvlStn": {
+     "stnCd": "2630",
+     "stnNo": "630",
+     "stnNm": "효창공원앞",
+     "lineNm": "6호선",
+     "brlnNm": null
+    },
+    "stnSctnDstc": 1000,
+    "reqHr": 120,
+    "wtngHr": 0,
+    "tmnlStnNm": "봉화산",
+    "upbdnbSe": "하행",
+    "trainDptreTm": "08:00:00",
+    "trainArvlTm": "08:02:00",
+    "trsitYn": "N",
+    "etrnYn": "N",
+    "nonstopYn": "N"
+   },
+   {
+    "dptreStn": {
+     "stnCd": "2630",
+     "stnNo": "630",
+     "stnNm": "효창공원앞",
+     "lineNm": "6호선",
+     "brlnNm": null
+    },
+    "arvlStn": {
+     "stnCd": "2631",
+     "stnNo": "631",
+     "stnNm": "삼각지",
+     "lineNm": "6호선",
+     "brlnNm": null
+    },
+    "stnSctnDstc": 1000,
+    "reqHr": 120,
+    "wtngHr": 0,
+    "tmnlStnNm": "봉화산",
+    "upbdnbSe": "하행",
+    "trainDptreTm": "08:02:30",
+    "trainArvlTm": "08:04:30",
+    "trsitYn": "N",
+    "etrnYn": "N",
+    "nonstopYn": "N"
+   },
+   {
+    "dptreStn": {
+     "stnCd": "2631",
+     "stnNo": "631",
+     "stnNm": "삼각지",
+     "lineNm": "6호선",
+     "brlnNm": null
+    },
+    "arvlStn": {
+     "stnCd": "0428",
+     "stnNo": "428",
+     "stnNm": "삼각지",
+     "lineNm": "4호선",
+     "brlnNm": null
+    },
+    "stnSctnDstc": 1000,
+    "reqHr": 180,
+    "wtngHr": 240,
+    "tmnlStnNm": null,
+    "upbdnbSe": "하행",
+    "trainDptreTm": null,
+    "trainArvlTm": null,
+    "trsitYn": "Y",
+    "etrnYn": "N",
+    "nonstopYn": "N"
+   },
+   {
+    "dptreStn": {
+     "stnCd": "0428",
+     "stnNo": "428",
+     "stnNm": "삼각지",
+     "lineNm": "4호선",
+     "brlnNm": null
+    },
+    "arvlStn": {
+     "stnCd": "0429",
+     "stnNo": "429",
+     "stnNm": "신용산",
+     "lineNm": "4호선",
+     "brlnNm": null
+    },
+    "stnSctnDstc": 1000,
+    "reqHr": 90,
+    "wtngHr": 0,
+    "tmnlStnNm": "당고개",
+    "upbdnbSe": "하행",
+    "trainDptreTm": "08:12:00",
+    "trainArvlTm": "08:13:30",
+    "trsitYn": "N",
+    "etrnYn": "N",
+    "nonstopYn": "N"
+   },
+   {
+    "dptreStn": {
+     "stnCd": "0429",
+     "stnNo": "429",
+     "stnNm": "신용산",
+     "lineNm": "4호선",
+     "brlnNm": null
+    },
+    "arvlStn": {
+     "stnCd": "0430",
+     "stnNo": "430",
+     "stnNm": "이촌",
+     "lineNm": "4호선",
+     "brlnNm": null
+    },
+    "stnSctnDstc": 1000,
+    "reqHr": 90,
+    "wtngHr": 0,
+    "tmnlStnNm": "당고개",
+    "upbdnbSe": "하행",
+    "trainDptreTm": "08:14:00",
+    "trainArvlTm": "08:15:00",
+    "trsitYn": "N",
+    "etrnYn": "N",
+    "nonstopYn": "N"
+   }
+  ]
+ }
+}
