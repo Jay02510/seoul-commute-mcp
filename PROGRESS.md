@@ -142,7 +142,7 @@ Reminder: paste shell commands without trailing `# comments` (zsh passes them as
 ## Done 2026-11-14
 - [x] English station names in `next_trains` and `route` (`sources/stations.py`, BUILD_GUIDE Step 20)
 - [x] Eval runner stops after 3 quota errors in a row; `--only 11-21` ranges
-- [ ] Redeploy the MCP service for English names (Step 14 command)
+- [x] Redeployed MCP service (revision 00006, 2026-11-14 20:12); live check: `route('Hongik Univ. Station', 'Gangnam')` returns 홍대입구 -> 강남, 38 min, 17 stops
 
 ## Ideas backlog
 - Nearest AirKorea station via 측정소정보 (getTMStdrCrdnt + getNearbyMsrstnList)

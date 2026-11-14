@@ -1793,7 +1793,6 @@ The job runs for a few seconds twice a weekday, inside Cloud Run's free tier.
 
 - Eval batches: Sunday `--only 11-21`, Monday `--only 22-33` (Step 20); then the score in README and the case study.
 - Cloud briefing: secrets, job, test, scheduler, retire launchd (Step 21).
-- Redeploy the MCP service (Step 14 command) for English station names.
 - Commit and push the Step 19-21 changes.
 - README GIF; budget alert in the console.
 
@@ -1856,3 +1855,4 @@ The job runs for a few seconds twice a weekday, inside Cloud Run's free tier.
 - 2026-11-14: Step 20: English station names (`sources/stations.py`, via `check_name`); eval runner stops after 3 quota errors in a row, `--only` takes ranges.
 - 2026-11-14: Step 21: briefing as a Cloud Run job (`run --routes-file`, `deploy/routes.json`, `kst_now()`, image copies `briefing/`), Cloud Scheduler commands. 147 tests.
 - 2026-11-14: Step 18 marked done: repo was pushed 2026-11-13.
+- 2026-11-14: MCP service redeployed (revision 00006); English names checked live through the Claude.ai connector.
