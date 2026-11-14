@@ -1,7 +1,7 @@
 """Run the eval set (33 questions) against the MCP server with a real model.
 
     uv run python -m evals.run                    # all cases
-    uv run python -m evals.run --only 17,23,27    # some cases
+    uv run python -m evals.run --only 17,23,27    # some cases (ranges work too: --only 11-21)
     uv run python -m evals.run --category route   # one category
     uv run python -m evals.run --with-instructions   # also give the model the server instructions
     uv run python -m evals.run --rerun evals/results/2026-11-12_1500.json   # redo only the errors
@@ -57,6 +57,36 @@ def regrade(r: dict) -> dict:
     log = [(t["name"], t["args"], t["result"]) for t in r["tools"]]
     checks = grade(case, r["answer"], log)
     return {**r, **case, "checks": checks, "status": "pass" if all(c["ok"] for c in checks) else "fail"}
+
+
+QUOTA_STOP = 3   # daily-quota errors in a row before the run stops
+
+
+def quota_hit(r: dict) -> bool:
+    """True for an error caused by a used-up quota (429), not a one-off 503."""
+    err = r.get("error", "")
+    return r["status"] == "error" and ("429" in err or "RESOURCE_EXHAUSTED" in err)
+
+
+def parse_ids(text: str) -> set[int]:
+    """'11-14,20' -> {11, 12, 13, 14, 20}."""
+    ids: set[int] = set()
+    for part in text.split(","):
+        part = part.strip()
+        if not part:
+            continue
+        if "-" in part:
+            a, b = (int(x) for x in part.split("-", 1))
+            ids.update(range(min(a, b), max(a, b) + 1))
+        else:
+            ids.add(int(part))
+    return ids
+
+
+def not_run(case: dict) -> dict:
+    """Placeholder for a case skipped after the quota ran out, so --rerun picks it up."""
+    return {**case, "status": "error", "error": "not run: daily quota reached", "model": None,
+            "seconds": 0, "checks": [], "tools": []}
 
 
 def server_instructions() -> str:
@@ -117,7 +147,7 @@ def report_md(results: list[dict], meta: dict) -> str:
 
 async def main() -> int:
     p = argparse.ArgumentParser(prog="evals.run")
-    p.add_argument("--only", help="comma-separated case ids, e.g. 17,23,27")
+    p.add_argument("--only", help="case ids, e.g. 17,23,27 or 11-21")
     p.add_argument("--category", help="weather, air, trains, route, commute, coverage, failure")
     p.add_argument("--delay", type=float, default=4.0, help="seconds between cases (free-tier rate limits)")
     p.add_argument("--with-instructions", action="store_true",
@@ -127,7 +157,7 @@ async def main() -> int:
     p.add_argument("-v", "--verbose", action="store_true", help="live tool-call trace")
     args = p.parse_args()
 
-    only = {int(x) for x in args.only.split(",")} if args.only else None
+    only = parse_ids(args.only) if args.only else None
     previous: dict[int, dict] = {}
     if args.rerun:
         old = json.loads(Path(args.rerun).read_text(encoding="utf-8"))
@@ -172,10 +202,19 @@ async def main() -> int:
         stem.with_suffix(".md").write_text(report_md(rows, meta), encoding="utf-8")
         return rows
 
+    streak = 0
     for i, case in enumerate(cases):
+        if streak >= QUOTA_STOP:
+            # Free-tier daily quota is gone: the rest would only collect 429s.
+            results.extend(not_run(c) for c in cases[i:])
+            rows = save()
+            print(f"\nStopped: {QUOTA_STOP} quota errors in a row (429). "
+                  f"{len(cases) - i} cases not run; try again after the quota resets.")
+            break
         if i:
             await asyncio.sleep(args.delay)
         r = await run_case(case, system, args.verbose)
+        streak = streak + 1 if quota_hit(r) else 0
         if r.get("model"):
             meta["models"].add(r["model"])
         results.append(r)

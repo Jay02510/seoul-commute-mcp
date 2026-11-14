@@ -9,6 +9,7 @@
   uv run -m briefing.main preview work --writer llm -v   # LLM writer, show tool calls
   uv run -m briefing.main compare work        # rules and LLM output side by side
   uv run -m briefing.main run [--force]       # send due routes to Telegram (used by launchd)
+  uv run -m briefing.main run --routes-file deploy/routes.json   # cloud job: routes from JSON, no database
   uv run -m briefing.main chat-id             # find your Telegram chat id
   uv run -m briefing.main remove work
 """
@@ -37,12 +38,20 @@ async def _build(route, writer: str = "rules", verbose: bool = False) -> str:
     return await _build_rules(route)
 
 
-async def cmd_run(force: bool, writer: str) -> int:
-    now = datetime.now()
-    con = store.connect()
-    # Each route has its own send time; due_routes() also skips stale ones
-    # (more than store.LATE_WINDOW late, e.g. the Mac woke at noon).
-    routes = store.list_routes(con) if force else store.due_routes(con, now)
+async def cmd_run(force: bool, writer: str, routes_file: str | None = None) -> int:
+    now = store.kst_now()
+    if routes_file:
+        # Cloud job (BUILD_GUIDE Step 21): no database, so no send log. Cloud
+        # Scheduler fires once per slot and the job never retries, so each
+        # route is still sent once; the send window picks morning vs evening.
+        con = None
+        routes = store.load_routes_file(routes_file)
+        routes = routes if force else [r for r in routes if store.in_window(r, now)]
+    else:
+        con = store.connect()
+        # Each route has its own send time; due_routes() also skips stale ones
+        # (more than store.LATE_WINDOW late, e.g. the Mac woke at noon).
+        routes = store.list_routes(con) if force else store.due_routes(con, now)
     if not routes:
         print(f"{now:%F %T} nothing due")
         return 0
@@ -51,7 +60,8 @@ async def cmd_run(force: bool, writer: str) -> int:
         try:
             text = await _build(r, writer)
             await telegram.send(text)
-            store.mark_sent(con, r["id"], now.date())
+            if con is not None:
+                store.mark_sent(con, r["id"], now.date())
             print(f"{now:%F %T} sent {r['name']}")
         except Exception as e:  # keep going for other routes; launchd log shows it
             failures += 1
@@ -133,6 +143,7 @@ def main() -> int:
     pv.add_argument("name", nargs="?")
     rn = sub.add_parser("run", help="send due briefings to Telegram")
     rn.add_argument("--force", action="store_true", help="ignore day, time and send log")
+    rn.add_argument("--routes-file", help="read routes from this JSON file instead of briefing.db (cloud job)")
     for sp in (pv, rn):
         sp.add_argument("--writer", choices=["rules", "llm"], default="rules",
                         help="rules (default) or llm (falls back to rules on failure)")
@@ -182,7 +193,7 @@ def main() -> int:
     if args.cmd == "preview":
         return asyncio.run(cmd_preview(args.name, args.writer, args.verbose))
     if args.cmd == "run":
-        return asyncio.run(cmd_run(args.force, args.writer))
+        return asyncio.run(cmd_run(args.force, args.writer, args.routes_file))
     if args.cmd == "compare":
         return asyncio.run(cmd_compare(args.name))
     if args.cmd == "chat-id":

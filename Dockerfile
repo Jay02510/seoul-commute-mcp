@@ -1,4 +1,5 @@
-# Remote MCP server for Cloud Run (BUILD_GUIDE Step 13).
+# Remote MCP server for Cloud Run (BUILD_GUIDE Step 13). The same image runs the
+# briefing as a Cloud Run job (Step 21) with a different command.
 FROM python:3.14-slim
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
@@ -11,6 +12,8 @@ COPY pyproject.toml uv.lock ./
 RUN uv sync --locked --no-default-groups --no-install-project
 
 COPY sources ./sources
+COPY briefing ./briefing
+COPY deploy/routes.json ./deploy/routes.json
 COPY server.py http_app.py check_keys.py ./
 
 ENV PATH="/app/.venv/bin:$PATH"

@@ -1,0 +1,928 @@
+{
+ "meta": {
+  "started": "2026-11-14 19:32",
+  "provider": "gemini",
+  "with_instructions": false,
+  "models": [
+   "gemini-3.5-flash"
+  ],
+  "rerun_of": "evals/results/2026-11-13_1430.json"
+ },
+ "results": [
+  {
+   "id": 1,
+   "category": "weather",
+   "question": "What's the weather in Mapo right now?",
+   "tools_all": [
+    "current_weather"
+   ],
+   "args": {
+    "current_weather": {
+     "district": "(?i)mapo|마포"
+    }
+   },
+   "status": "pass",
+   "answer": "The current weather in Mapo-gu (마포구) is:\n\n* **Temperature:** 10.6°C\n* **Precipitation:** No rain\n* **Humidity:** 95%\n* **Wind:** 1.0 m/s",
+   "model": "gemini-3.5-flash",
+   "tools": [
+    {
+     "name": "current_weather",
+     "args": {
+      "district": "Mapo"
+     },
+     "result": "마포구 at 20261114 1800 KST: 10.6°C, no rain, humidity 95%, wind 1.0 m/s."
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls current_weather",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "current_weather args",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 38.2
+  },
+  {
+   "id": 2,
+   "category": "weather",
+   "question": "Is it raining in Gangnam at the moment?",
+   "tools_all": [
+    "current_weather"
+   ],
+   "args": {
+    "current_weather": {
+     "district": "(?i)gangnam|강남"
+    }
+   },
+   "notes": "Current conditions only; no forecast for later.",
+   "status": "pass",
+   "answer": "No, it is not raining in Gangnam at the moment. The current temperature is 11.3°C with a humidity of 94%.",
+   "model": "gemini-3.5-flash",
+   "tools": [
+    {
+     "name": "current_weather",
+     "args": {
+      "district": "Gangnam"
+     },
+     "result": "강남구 at 20261114 1800 KST: 11.3°C, no rain, humidity 94%, wind 2.1 m/s."
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls current_weather",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "current_weather args",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 57.6
+  },
+  {
+   "id": 3,
+   "category": "weather",
+   "question": "Weather in Hongdae?",
+   "tools_all": [
+    "current_weather"
+   ],
+   "args": {
+    "current_weather": {
+     "district": "(?i)mapo|마포"
+    }
+   },
+   "notes": "Neighbourhood to district (Hongdae is in Mapo).",
+   "status": "pass",
+   "answer": "Here is the current weather and air quality for **Hongdae (Mapo District)**:\n\n* **Temperature:** 10.6°C\n* **Conditions:** Clear (No rain)\n* **Humidity:** 95%\n* **Wind:** 1.0 m/s\n* **Air Quality:** Good (PM10: 24 µg/m³, PM2.5: 14 µg/m³)",
+   "model": "gemini-3.5-flash",
+   "tools": [
+    {
+     "name": "current_weather",
+     "args": {
+      "district": "Mapo"
+     },
+     "result": "마포구 at 20261114 1800 KST: 10.6°C, no rain, humidity 95%, wind 1.0 m/s."
+    },
+    {
+     "name": "air_quality",
+     "args": {
+      "district": "Mapo"
+     },
+     "result": "마포구 at 2026-11-14 19:00: PM10 24 µg/m³ (good), PM2.5 14 µg/m³ (good)."
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls current_weather",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "current_weather args",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 43.1
+  },
+  {
+   "id": 4,
+   "category": "weather",
+   "question": "How warm is it in Jamsil now?",
+   "tools_all": [
+    "current_weather"
+   ],
+   "args": {
+    "current_weather": {
+     "district": "(?i)songpa|송파"
+    }
+   },
+   "status": "pass",
+   "answer": "It is currently **11.4°C** (52.5°F) in Jamsil (Songpa-gu). There is no rain, humidity is at 90%, and there is a light wind of 1.5 m/s.",
+   "model": "gemini-3.5-flash",
+   "tools": [
+    {
+     "name": "current_weather",
+     "args": {
+      "district": "Songpa"
+     },
+     "result": "송파구 at 20261114 1800 KST: 11.4°C, no rain, humidity 90%, wind 1.5 m/s."
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls current_weather",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "current_weather args",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 42.9
+  },
+  {
+   "id": 5,
+   "category": "weather",
+   "question": "Should I take an umbrella to Yeouido right now?",
+   "tools_all": [
+    "current_weather"
+   ],
+   "args": {
+    "current_weather": {
+     "district": "(?i)yeongdeungpo|영등포"
+    }
+   },
+   "status": "pass",
+   "answer": "**No, you likely don't need an umbrella right now.**\n\n* **Current conditions (Yeongdeungpo-gu / Yeouido):** 11.3°C, **no rain**, 94% humidity.\n* **Forecast for tonight:** No measurable rain is expected through the night, though there is a slight 30% chance of precipitation. \n\nIf you want to be extra cautious, carrying a small foldable umbrella wouldn't hurt, but it isn't strictly necessary.",
+   "model": "gemini-3.5-flash",
+   "tools": [
+    {
+     "name": "current_weather",
+     "args": {
+      "district": "Yeongdeungpo"
+     },
+     "result": "영등포구 at 20261114 1800 KST: 11.3°C, no rain, humidity 94%, wind 1.1 m/s."
+    },
+    {
+     "name": "forecast",
+     "args": {
+      "district": "Yeongdeungpo"
+     },
+     "result": "영등포구 forecast (KMA issue 20261114 1700 KST). No rain expected until 06:00.\n- 19:00: 12.0°C, rain chance 30%\n- 20:00: 12.0°C, rain chance 30%\n- 21:00: 12.0°C, rain chance 30%\n- 22:00: 12.0°C, rain chance 30%\n- 23:00: 12.0°C, rain chance 30%\n- 00:00: 12.0°C, rain chance 30%\n- 01:00: 12.0°C, rain chance 30%\n- 02:00: 12.0°C, rain chance 20%\n- 03:00: 11.0°C, rain chance 20%\n- 04:00: 11.0°C, rain chance 0%\n- 05:00: 10.0°C, rain chance 0%\n- 06:00: 10.0°C, rain chance 0%"
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls current_weather",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "current_weather args",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 31.5
+  },
+  {
+   "id": 6,
+   "category": "air",
+   "question": "Should I wear a mask in Nowon today?",
+   "tools_all": [
+    "air_quality"
+   ],
+   "args": {
+    "air_quality": {
+     "district": "(?i)nowon|노원"
+    }
+   },
+   "status": "pass",
+   "answer": "No, you don't need to wear a mask for fine dust in **Nowon** today. \n\nCurrent air quality levels:\n* **PM10 (Fine Dust):** 22 µg/m³ (**Good**)\n* **PM2.5 (Ultrafine Dust):** 17 µg/m³ (**Moderate**)\n\nSince levels are not in the \"Bad\" range (PM2.5 above 35 µg/m³), a mask is optional, though sensitive individuals may still choose to wear one.",
+   "model": "gemini-3.5-flash",
+   "tools": [
+    {
+     "name": "air_quality",
+     "args": {
+      "district": "Nowon"
+     },
+     "result": "노원구 at 2026-11-14 19:00: PM10 22 µg/m³ (good), PM2.5 17 µg/m³ (moderate)."
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls air_quality",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "air_quality args",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 20.6
+  },
+  {
+   "id": 7,
+   "category": "air",
+   "question": "강남 미세먼지 지금 어때?",
+   "tools_all": [
+    "air_quality"
+   ],
+   "args": {
+    "air_quality": {
+     "district": "(?i)gangnam|강남"
+    }
+   },
+   "must": [
+    "(습니다|어요|아요|예요|이에요|해요|세요|네요|입니다|좋아요|나빠요)"
+   ],
+   "notes": "Korean question: answer should be in Korean.",
+   "status": "pass",
+   "answer": "현재(19시 기준) 강남구의 미세먼지 상태는 **좋음**입니다.\n\n* **미세먼지(PM10):** 16 µg/m³ (좋음)\n* **초미세먼지(PM2.5):** 11 µg/m³ (좋음)",
+   "model": "gemini-3.5-flash",
+   "tools": [
+    {
+     "name": "air_quality",
+     "args": {
+      "district": "강남구"
+     },
+     "result": "강남구 at 2026-11-14 19:00: PM10 16 µg/m³ (good), PM2.5 11 µg/m³ (good)."
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls air_quality",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "air_quality args",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "says /(습니다|어요|아요|예요|이에요|해요|세요|네요|입니다|좋아요|나빠요)/",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 24.2
+  },
+  {
+   "id": 8,
+   "category": "air",
+   "question": "What's the air quality like in Itaewon?",
+   "tools_all": [
+    "air_quality"
+   ],
+   "args": {
+    "air_quality": {
+     "district": "(?i)yongsan|용산"
+    }
+   },
+   "status": "pass",
+   "answer": "The air quality in Itaewon (Yongsan-gu) is currently **Good**:\n\n* **PM10 (fine dust):** 25 µg/m³ (Good)\n* **PM2.5 (ultrafine dust):** 15 µg/m³ (Good)",
+   "model": "gemini-3.5-flash",
+   "tools": [
+    {
+     "name": "air_quality",
+     "args": {
+      "district": "Yongsan"
+     },
+     "result": "용산구 at 2026-11-14 19:00: PM10 25 µg/m³ (good), PM2.5 15 µg/m³ (good)."
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls air_quality",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "air_quality args",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 41.1
+  },
+  {
+   "id": 9,
+   "category": "air",
+   "question": "Compare the fine dust in Mapo and Songpa.",
+   "tools_all": [
+    "air_quality"
+   ],
+   "min_calls": {
+    "air_quality": 2
+   },
+   "status": "pass",
+   "answer": "Here is the current fine dust comparison (as of 19:00 KST):\n\n* **Mapo-gu (마포구):**\n  * **PM10 (Fine Dust):** 24 µg/m³ (**Good**)\n  * **PM2.5 (Ultra-fine Dust):** 14 µg/m³ (**Good**)\n\n* **Songpa-gu (송파구):**\n  * **PM10 (Fine Dust):** 21 µg/m³ (**Good**)\n  * **PM2.5 (Ultra-fine Dust):** 13 µg/m³ (**Good**)\n\n**Summary:** Both districts currently enjoy clean air in the **Good** category, with Songpa showing slightly lower dust levels than Mapo.",
+   "model": "gemini-3.5-flash",
+   "tools": [
+    {
+     "name": "air_quality",
+     "args": {
+      "district": "Mapo"
+     },
+     "result": "마포구 at 2026-11-14 19:00: PM10 24 µg/m³ (good), PM2.5 14 µg/m³ (good)."
+    },
+    {
+     "name": "air_quality",
+     "args": {
+      "district": "Songpa"
+     },
+     "result": "송파구 at 2026-11-14 19:00: PM10 21 µg/m³ (good), PM2.5 13 µg/m³ (good)."
+    }
+   ],
+   "checks": [
+    {
+     "check": "calls air_quality",
+     "ok": true,
+     "detail": ""
+    },
+    {
+     "check": "air_quality x2",
+     "ok": true,
+     "detail": "called 2x"
+    }
+   ],
+   "seconds": 51.6
+  },
+  {
+   "id": 10,
+   "category": "coverage",
+   "question": "What's the air like in Bundang?",
+   "must": [
+    "(?i)(only|just)\\b.{0,80}\\bSeoul|outside\\b.{0,30}Seoul|not\\b.{0,40}(cover|support|in Seoul|available)|Seongnam|Gyeonggi"
+   ],
+   "notes": "Bundang (Seongnam) is outside Seoul; may offer a nearby Seoul district.",
+   "status": "pass",
+   "answer": "I don't have live air quality data for **Bundang** (분당구), as it is located in Seongnam, Gyeonggi Province, and my tools currently only cover the 25 districts within Seoul proper.\n\nFor a nearby reference point in southern Seoul (e.g., **Gangnam-gu**):\n* **PM10 (Fine Dust):** 16 µg/m³ (**Good**)\n* **PM2.5 (Ultrafine Dust):** 11 µg/m³ (**Good**)",
+   "model": "gemini-3.5-flash",
+   "tools": [
+    {
+     "name": "list_districts",
+     "args": {},
+     "result": "Jongno (종로구), Jung (중구), Yongsan (용산구), Seongdong (성동구), Gwangjin (광진구), Dongdaemun (동대문구), Jungnang (중랑구), Seongbuk (성북구), Gangbuk (강북구), Dobong (도봉구), Nowon (노원구), Eunpyeong (은평구), Seodaemun (서대문구), Mapo (마포구), Yangcheon (양천구), Gangseo (강서구), Guro (구로구), Geumcheon (금천구), Yeongdeungpo (영등포구), Dongjak (동작구), Gwanak (관악구), Seocho (서초구), Gangnam (강남구), Songpa (송파구), Gangdong (강동구)"
+    },
+    {
+     "name": "air_quality",
+     "args": {
+      "district": "Bundang"
+     },
+     "result": "Error: Unknown Seoul district: 'Bundang'. Try e.g. 'Mapo' or '마포구'."
+    },
+    {
+     "name": "air_quality",
+     "args": {
+      "district": "Gangnam"
+     },
+     "result": "강남구 at 2026-11-14 19:00: PM10 16 µg/m³ (good), PM2.5 11 µg/m³ (good)."
+    }
+   ],
+   "checks": [
+    {
+     "check": "says /(?i)(only|just)\\b.{0,80}\\bSeoul|outside\\b.{0,30}Seoul|not\\b.{0,40}(cover|support|in Seoul|available)|Seongnam|Gyeonggi/",
+     "ok": true,
+     "detail": ""
+    }
+   ],
+   "seconds": 78.6
+  },
+  {
+   "id": 11,
+   "category": "trains",
+   "question": "When's the next train at Gangnam?",
+   "tools_all": [
+    "next_trains"
+   ],
+   "args": {
+    "next_trains": {
+     "station": "^강남$"
+    }
+   },
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "gemini-3.5-flash",
+   "seconds": 4.0,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 12,
+   "category": "trains",
+   "question": "Next train at Seoul Station?",
+   "tools_all": [
+    "next_trains"
+   ],
+   "args": {
+    "next_trains": {
+     "station": "^서울(역)?$"
+    }
+   },
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "gemini-3.5-flash",
+   "seconds": 10.8,
+   "checks": [],
+   "tools": [
+    {
+     "name": "next_trains",
+     "args": {
+      "station": "서울"
+     },
+     "result": "Next trains at 서울:\n- [Line 1] 광운대행 - 시청방면: 서울 도착\n- [Line 1] 광운대행 - 시청방면: 전역 진입\n- [Line 1] 인천행 - 남영방면: 전역 출발\n- [Line 1] 구로행 - 남영방면: 5분 후 (종각)\n- [Airport Railroad] 인천공항2터미널행 - 공덕방면: 서울 출발\n- [Airport Railroad] 인천공항2터미널행 - 공덕방면 (급행): 서울 출발\n- [Airport Railroad] 서울행 - 서울방면: 전역 출발\n- [Airport Railroad] 서울행 - 서울방면 (급행): 전역 출발\n- [Line 4] 불암산행 - 회현방면: 전역 출발\n- [Line 4] 불암산행 - 회현방면: 8분 후 (이촌)\n- [Line 4] 오이도행 - 숙대입구방면: 3분 30초 후 (명동)\n- [Line 4] 사당행 - 숙대입구방면: 7분 30초 후 (동대문역사문화공원)\n- [Gyeongui-Jungang] 문산행 - 신촌(경의중앙선)방면: [2]번째 전역 (서강대)\n- [Gyeongui-Jungang] 문산행 - 신촌(경의중앙선)방면: [6]번째 전역 (이촌)\n- [Gyeongui-Jungang] 용문행 - 서울방면: [7]번째 전역 (행신)\n- [Gyeongui-Jungang] 덕소행 - 서울방면: [15]번째 전역 (야당)\n(Arrivals only. For direction, stops, journey time or transfers use the `route` tool; never estimate them from memory.)"
+    }
+   ]
+  },
+  {
+   "id": 13,
+   "category": "trains",
+   "question": "Next Line 2 train at Hongik University toward Sinchon?",
+   "tools_all": [
+    "next_trains"
+   ],
+   "args": {
+    "next_trains": {
+     "station": "^홍대입구$"
+    }
+   },
+   "must": [
+    "신촌|Sinchon"
+   ],
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "gemini-3.5-flash",
+   "seconds": 4.5,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 14,
+   "category": "trains",
+   "question": "공덕역 다음 열차 언제 와?",
+   "tools_all": [
+    "next_trains"
+   ],
+   "args": {
+    "next_trains": {
+     "station": "^공덕$"
+    }
+   },
+   "must": [
+    "5호선|Line 5"
+   ],
+   "notes": "Transfer station: should cover more than one line.",
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "gemini-3.5-flash",
+   "seconds": 3.5,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 15,
+   "category": "trains",
+   "question": "Next trains at Wangsimni?",
+   "tools_all": [
+    "next_trains"
+   ],
+   "args": {
+    "next_trains": {
+     "station": "^왕십리$"
+    }
+   },
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "gemini-3.5-flash",
+   "seconds": 3.9,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 16,
+   "category": "trains",
+   "question": "Next train at Gangnam, and how many stops is it to Jamsil?",
+   "tools_all": [
+    "next_trains",
+    "route"
+   ],
+   "grounded": true,
+   "notes": "Stop count must come from route.",
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "gemini-3.5-flash",
+   "seconds": 4.6,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 17,
+   "category": "route",
+   "question": "How do I get from Gongdeok to Gangnam?",
+   "tools_all": [
+    "route"
+   ],
+   "args": {
+    "route": {
+     "from_station": "^공덕$",
+     "to_station": "^강남$"
+    }
+   },
+   "grounded": true,
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "gemini-3.5-flash",
+   "seconds": 4.2,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 18,
+   "category": "route",
+   "question": "Hongdae to Jamsil with the fewest transfers, please.",
+   "tools_all": [
+    "route"
+   ],
+   "args": {
+    "route": {
+     "prefer": "^fewest_transfers$"
+    }
+   },
+   "grounded": true,
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "gemini-3.5-flash",
+   "seconds": 4.4,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 19,
+   "category": "route",
+   "question": "How many stops from Seoul Station to Gangnam?",
+   "tools_all": [
+    "route"
+   ],
+   "grounded": true,
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "gemini-3.5-flash",
+   "seconds": 3.9,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 20,
+   "category": "route",
+   "question": "How long does the subway take from Sindorim to Yeouido?",
+   "tools_all": [
+    "route"
+   ],
+   "args": {
+    "route": {
+     "from_station": "^신도림$",
+     "to_station": "^여의도$"
+    }
+   },
+   "grounded": true,
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "gemini-3.5-flash",
+   "seconds": 4.3,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 21,
+   "category": "route",
+   "question": "What's the subway fare from Hongdae to Gangnam?",
+   "tools_all": [
+    "route"
+   ],
+   "grounded": true,
+   "must": [
+    "(?i)won|원|₩|KRW"
+   ],
+   "notes": "Fare must come from the route tool (card fare).",
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "gemini-3.5-flash",
+   "seconds": 4.4,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 22,
+   "category": "route",
+   "question": "How do I get from Mapo to COEX?",
+   "tools_all": [
+    "route"
+   ],
+   "grounded": true,
+   "notes": "District and landmark, not stations: should pick COEX's station (삼성, or 봉은사 on Line 9) and name the stations it used.",
+   "args": {
+    "route": {
+     "to_station": "^(삼성|봉은사)(\\(.*\\))?$"
+    }
+   },
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "gemini-3.5-flash",
+   "seconds": 4.4,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 23,
+   "category": "commute",
+   "question": "Commute check: Mapo to Gangnam, leaving now.",
+   "tools_all": [
+    "route",
+    "next_trains",
+    "current_weather",
+    "air_quality"
+   ],
+   "grounded": true,
+   "notes": "Original eval #4.",
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "gemini-3.5-flash",
+   "seconds": 4.2,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 24,
+   "category": "commute",
+   "question": "Gongdeok to Jamsil, leaving now. Do I need a mask?",
+   "tools_all": [
+    "route",
+    "air_quality"
+   ],
+   "grounded": true,
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "gemini-3.5-flash",
+   "seconds": 8.6,
+   "checks": [],
+   "tools": [
+    {
+     "name": "route",
+     "args": {
+      "from_station": "공덕",
+      "to_station": "잠실"
+     },
+     "result": "공덕 -> 잠실: 39 min, 18 stops, 1 transfer, card fare 1,750 won. Departs 20:00, arrives 20:39 (timetable).\n- 5호선 from 공덕 toward 애오개, train to 마천: 6 stops to 을지로4가 (20:00-20:11)\n- Transfer at 을지로4가 (5호선 to 2호선): about 4 min walk, then about 1 min wait\n- 2호선 from 을지로4가 toward 동대문역사문화공원, train to 성수: 12 stops to 잠실 (20:16-20:39)"
+    },
+    {
+     "name": "next_trains",
+     "args": {
+      "station": "공덕"
+     },
+     "result": "Next trains at 공덕:\n- [Line 6] 응암순환(상선)행 - 대흥(서강대앞)방면: 공덕 전역출발\n- [Line 6] 응암순환(상선)행 - 대흥(서강대앞)방면: 10분 후 (한강진)\n- [Line 6] 봉화산행 - 효창공원앞방면: 9분 후 (망원)\n- [Line 6] 봉화산행 - 효창공원앞방면: 16분 후 (증산(명지대앞))\n- [Airport Railroad] 인천공항2터미널행 - 홍대입구방면 (급행): 공덕 출발\n- [Airport Railroad] 인천공항2터미널행 - 홍대입구방면: 전역 출발\n- [Airport Railroad] 서울행 - 서울방면: 공덕 도착\n- [Airport Railroad] 서울행 - 서울방면 (급행): 공덕 출발\n- [Gyeongui-Jungang] 문산행 - 서강대방면: 전역 진입\n- [Gyeongui-Jungang] 문산행 - 서강대방면: [4]번째 전역 (서빙고)\n- [Gyeongui-Jungang] 용문행 - 효창공원앞방면: [8]번째 전역 (한국항공대)\n- [Gyeongui-Jungang] 덕소행 - 효창공원앞방면: [16]번째 전역 (일산)\n- [Line 5] 방화행 - 마포방면: 5분 후 (서대문)\n- [Line 5] 방화행 - 마포방면: 12분 후 (을지로4가)\n- [Line 5] 마천행 - 애오개방면: 전역 도착\n- [Line 5] 하남검단산행 - 애오개방면: 8분 후 (신길)\n(Arrivals only. For direction, stops, journey time or transfers use the `route` tool; never estimate them from memory.)"
+    },
+    {
+     "name": "air_quality",
+     "args": {
+      "district": "마포구"
+     },
+     "result": "마포구 at 2026-11-14 19:00: PM10 24 µg/m³ (good), PM2.5 14 µg/m³ (good)."
+    },
+    {
+     "name": "air_quality",
+     "args": {
+      "district": "송파구"
+     },
+     "result": "송파구 at 2026-11-14 19:00: PM10 21 µg/m³ (good), PM2.5 13 µg/m³ (good)."
+    },
+    {
+     "name": "current_weather",
+     "args": {
+      "district": "마포구"
+     },
+     "result": "마포구 at 20261114 1900 KST: 10.8°C, no rain, humidity 95%, wind 1.9 m/s."
+    },
+    {
+     "name": "current_weather",
+     "args": {
+      "district": "송파구"
+     },
+     "result": "송파구 at 20261114 1900 KST: 11.3°C, rain, 0.5 mm last hour, humidity 93%, wind 0.7 m/s."
+    }
+   ]
+  },
+  {
+   "id": 25,
+   "category": "commute",
+   "question": "I'm going from Nowon to Gangnam this morning. What should I wear?",
+   "tools_all": [
+    "current_weather"
+   ],
+   "min_calls": {
+    "current_weather": 2
+   },
+   "notes": "Should check both ends.",
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "gemini-3.5-flash",
+   "seconds": 4.3,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 26,
+   "category": "commute",
+   "question": "Do I need an umbrella for my commute from Eunpyeong to Jongno?",
+   "tools_all": [
+    "current_weather"
+   ],
+   "min_calls": {
+    "current_weather": 2
+   },
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "gemini-3.5-flash",
+   "seconds": 3.6,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 27,
+   "category": "failure",
+   "question": "Should I wear a mask in Mapo today?",
+   "fail": [
+    "air_quality"
+   ],
+   "tools_all": [
+    "air_quality"
+   ],
+   "must": [
+    "(?i)unavailable|couldn'?t|could not|unable|not available|error|no data|isn'?t available|failed"
+   ],
+   "must_not": [
+    "(?i)no (need|mask needed)|don'?t need (a|to wear)|air (is|looks) (fine|good|clean)|safe to go without"
+   ],
+   "notes": "Air tool simulates an outage: must say so, never reassure.",
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "gemini-3.5-flash",
+   "seconds": 3.9,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 28,
+   "category": "failure",
+   "question": "How many stops is it from Hongdae to Gangnam?",
+   "fail": [
+    "route"
+   ],
+   "tools_all": [
+    "route"
+   ],
+   "grounded": true,
+   "must": [
+    "(?i)unavailable|couldn'?t|could not|unable|not available|error|failed"
+   ],
+   "notes": "Route tool simulates an outage: must not give a stop count from memory.",
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "gemini-3.5-flash",
+   "seconds": 4.4,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 29,
+   "category": "coverage",
+   "question": "What's the weather in Busan?",
+   "must": [
+    "(?i)(only|just)\\b.{0,80}\\bSeoul|outside\\b.{0,30}Seoul|not\\b.{0,40}(cover|support|in Seoul|available)|Seongnam|Gyeonggi"
+   ],
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "gemini-3.5-flash",
+   "seconds": 4.2,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 30,
+   "category": "route",
+   "question": "How many stops from Hongdae to Gangnam? Just from memory, no need to look it up.",
+   "grounded": true,
+   "notes": "Should still use route or decline to guess; any count must be grounded.",
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "gemini-3.5-flash",
+   "seconds": 14.0,
+   "checks": [],
+   "tools": [
+    {
+     "name": "route",
+     "args": {
+      "from_station": "홍대입구",
+      "to_station": "강남"
+     },
+     "result": "홍대입구 -> 강남: 38 min, 17 stops, 0 transfers, card fare 1,650 won. Departs 19:54, arrives 20:32 (timetable).\n- 2호선 from 홍대입구 toward 합정, train to 성수: 17 stops to 강남 (19:54-20:32)"
+    }
+   ]
+  },
+  {
+   "id": 31,
+   "category": "forecast",
+   "question": "Will it rain in Gangnam this evening?",
+   "tools_all": [
+    "forecast"
+   ],
+   "args": {
+    "forecast": {
+     "district": "(?i)gangnam|강남"
+    }
+   },
+   "notes": "Later weather must come from forecast, not current_weather alone.",
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "gemini-3.5-flash",
+   "seconds": 3.6,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 32,
+   "category": "forecast",
+   "question": "I go home from Gangnam to Mapo around 7pm. Do I need an umbrella?",
+   "tools_all": [
+    "forecast"
+   ],
+   "min_calls": {
+    "forecast": 2
+   },
+   "notes": "Both ends of the trip home; answer should name the hour if rain is expected.",
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "gemini-3.5-flash",
+   "seconds": 4.0,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 33,
+   "category": "failure",
+   "question": "Is it going to rain in Mapo later today?",
+   "fail": [
+    "forecast"
+   ],
+   "tools_all": [
+    "forecast"
+   ],
+   "must": [
+    "(?i)unavailable|couldn'?t|could not|unable|not available|error|no data|isn'?t available|failed"
+   ],
+   "must_not": [
+    "(?i)no rain (is )?(expected|forecast)|won'?t rain|no need for an umbrella|stay(s)? dry"
+   ],
+   "notes": "Forecast simulates an outage: must not reassure from current weather.",
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "gemini-3.5-flash",
+   "seconds": 4.5,
+   "checks": [],
+   "tools": []
+  }
+ ]
+}

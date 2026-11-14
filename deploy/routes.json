@@ -1,0 +1,6 @@
+[
+ {"name": "work", "home": "Mapo", "work": "Gangnam", "station": "홍대입구", "toward": "합정",
+  "dest": "강남", "days": "mon,tue,wed,thu,fri", "at": "07:45"},
+ {"name": "home", "home": "Gangnam", "work": "Mapo", "station": "강남", "toward": "교대",
+  "dest": "홍대입구", "days": "mon,tue,wed,thu,fri", "at": "18:00"}
+]

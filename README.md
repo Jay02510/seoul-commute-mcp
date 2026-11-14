@@ -9,7 +9,7 @@ commute briefings that arrive on Telegram every weekday, morning and evening.
 ![Demo: Claude.ai using the Seoul MCP connector](docs/demo.gif)
 
 **Eval score:** _TBD_/33 (gemini-3.5-flash, see [Evaluation](#evaluation))
-· **Tests:** 128 offline + live-fixture checks
+· **Tests:** 147 offline + live-fixture checks
 
 ## What it does
 
@@ -31,8 +31,9 @@ model's memory, and the evals check that.
 | `route(from_station, to_station, prefer)` | Seoul Metro shortest path | Legs, transfers, stops, timetable times, fare |
 | `list_districts()` | built in | The 25 Seoul districts the server covers |
 
-Coverage is Seoul's 25 districts and the Seoul Metro network. Station names are
-Korean (`홍대입구`, `강남`); districts work in English or Korean (`Mapo`, `마포구`).
+Coverage is Seoul's 25 districts and the Seoul Metro network. Stations work in
+Korean (`홍대입구`) or common English (`Hongdae`, `Hongik Univ.`, `Seoul Station`);
+districts in English or Korean (`Mapo`, `마포구`).
 
 ## Architecture
 
@@ -44,7 +45,7 @@ Korean (`홍대입구`, `강남`); districts work in English or Korean (`Mapo`, 
  (connector)        │  Cloud Run, Seoul region   │      data.seoul.go.kr: subway
                     │                            │
  Briefings ─────────┤ stdio (LLM writer) or      │
- (launchd)          │ direct calls (rules writer)│
+ (Cloud Run job)    │ direct calls (rules writer)│
                     └────────────────────────────┘
                          server.py + sources/
 ```
@@ -61,8 +62,9 @@ Korean (`홍대입구`, `강남`); districts work in English or Korean (`Mapo`, 
 - `briefing/`: the Telegram briefing. SQLite stores routes and a send log
   (no double sends), `compose.py` is a rule-based writer, `llm.py` is an MCP
   client that lets Gemini or Claude write the message with the same tools.
-  Each route has its own send time; launchd fires at 07:45 and 18:00 on
-  weekdays and sends whatever is due.
+  Each route has its own send time. In production it runs as a Cloud Run job
+  that Cloud Scheduler starts at 07:45 and 18:00 on weekdays (routes from
+  `deploy/routes.json`); on the Mac, launchd does the same with SQLite.
 
 ## The morning briefing
 

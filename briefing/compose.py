@@ -11,9 +11,10 @@ from datetime import datetime
 from sources import airkorea, kma, route as routes, subway
 from sources.districts import DISTRICTS
 
-from .store import dest as dest_of
+from .store import dest as dest_of, kst_now
 
-FORECAST_HOURS = 15   # 07:45 run covers up to 21:00, the trip home included
+FORECAST_HOURS = 15   # fetched; only today's hours up to LATER_UNTIL are used
+LATER_UNTIL = "22:00" # rain at 05:00 tomorrow is not today's commute
 GRADE_RANK = {"good": 0, "moderate": 1, "bad": 2, "very bad": 3}
 
 
@@ -86,7 +87,7 @@ def _ok(x) -> bool:
 def compose(route, data: dict, now: datetime | None = None) -> str:
     """Rules writer. Every part of the route (weather and air at each end, the
     trains) is either shown or marked unavailable: never silently left out."""
-    now = now or datetime.now()
+    now = now or kst_now()
     home, work = _short(route["home"]), _short(route["work"])
     lines = [f"🚇 {route['name']}: {home} → {work} · {now:%a %H:%M}", ""]
     tips: list[str] = []
@@ -123,12 +124,18 @@ def compose(route, data: dict, now: datetime | None = None) -> str:
     # NOW comes from the weather block above; this one is for rain later.
     if "forecast_home" in data:
         fends = [(home, data["forecast_home"]), (work, data["forecast_work"])]
-        fcs = [(name, f) for name, f in fends if _ok(f)]
+        today = now.strftime("%Y%m%d")
+        fcs = [(name, {**f, "hours": [h for h in f["hours"]
+                                      if h["date"] == today and h["time"] <= LATER_UNTIL]})
+               for name, f in fends if _ok(f)]
+        fcs = [(name, f) for name, f in fcs if f["hours"]]   # late run: nothing left today
         for name, f in fends:
             if not _ok(f):
                 missing.append(f"{name} forecast")
-        if not fcs:
+        if not any(_ok(f) for _, f in fends):
             lines.append(f"Later: forecast unavailable ({_why(data['forecast_home'])})")
+        elif not fcs:
+            pass                                              # checked, but no hours left today
         else:
             firsts = [(name, kma.wet_hours(f)[0]) for name, f in fcs if kma.wet_hours(f)]
             if firsts:

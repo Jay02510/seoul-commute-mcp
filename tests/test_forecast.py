@@ -64,11 +64,12 @@ def test_forecast_error_code(fake_get_json):
 
 # Briefing
 
-def fc(times_wet=(), until="19:00", pop=70):
+def fc(times_wet=(), until="19:00", pop=70, extra=()):
     hours = [{"date": "20261112", "time": f"{h:02d}:00", "temp_c": 12.0,
               "pop": pop if f"{h:02d}:00" in times_wet else 10,
               "precip": "rain" if f"{h:02d}:00" in times_wet else "none", "pcp": "강수없음"}
              for h in range(8, int(until[:2]) + 1)]
+    hours += list(extra)
     return {"district": "x", "issued": "20261112 0500", "hours": hours}
 
 
@@ -86,6 +87,16 @@ def test_rain_later_adds_umbrella():
     assert "Later: rain likely from 18:00 in Gangnam (70%)" in text
     assert "☂️ Take an umbrella for later (18:00)." in text
     assert "✅" not in text
+
+
+def test_rain_tomorrow_morning_is_ignored():
+    """2026-11-13 14:26 preview: 'umbrella for later (05:00)' came from tomorrow's forecast."""
+    tomorrow = {"date": "20261113", "time": "05:00", "temp_c": 9.0, "pop": 60, "precip": "rain", "pcp": "1.0mm"}
+    late = {"date": "20261112", "time": "23:00", "temp_c": 9.0, "pop": 80, "precip": "rain", "pcp": "1.0mm"}
+    text = c.compose(ROUTE, data(forecast_home=fc(extra=[late, tomorrow]), forecast_work=fc()), NOW)
+    assert "05:00" not in text and "23:00" not in text
+    assert "Later: no rain expected until 19:00" in text
+    assert "✅ No umbrella or mask needed." in text
 
 
 def test_failed_forecast_blocks_reassurance():

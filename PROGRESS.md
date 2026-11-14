@@ -54,7 +54,11 @@
     - [x] Fixed: the rules writer silently dropped Gangnam weather and Mapo air when those calls failed. Now each end shows a value or "unavailable", a footer lists what's missing, advice uses the worst checked end, and full errors go to stderr (2026-11-12, tested offline)
     - [x] LLM briefing sent to Telegram with `run --force --writer llm` (2026-11-12 10:31): different layout from rules, so no fallback
     - [x] Per-route send time + send window; plist also fires weekdays 18:00 (BUILD_GUIDE Step 19, 128 tests)
-    - [ ] Add `home` route (강남 toward 교대, to 홍대입구, 18:00), check `preview home`, reload launchd
+    - [x] `home` route added (강남 toward 교대, to 홍대입구, 18:00); `preview home` correct: 2호선 direct, 17 stops
+    - [x] Fix: briefing forecast uses only today's hours up to 22:00 (preview warned about rain at 05:00 next day). 129 tests
+    - [ ] Reload launchd so the 18:00 run is active (or skip: Step 21 replaces launchd)
+    - [x] Cloud briefing code: `run --routes-file deploy/routes.json`, Seoul time in the container, image includes `briefing/` (BUILD_GUIDE Step 21)
+    - [ ] Deploy the Cloud Run job + 2 Cloud Scheduler jobs, test with `--force`, then `launchctl bootout`
     - [ ] Compare rules vs LLM output for a few days; add cases to `evals.md`
     - [ ] Switch launchd to `--writer llm` once it's reliably better
     - [x] Journey line (BUILD_GUIDE Step 9): `dest` column + migration, `set-dest` / `add-route --to`, `route()` in `gather`, warning if the API's direction differs from the saved one; LLM prompt asks for it too. Route `work` set to ride to 강남 (2026-11-12)
@@ -74,7 +78,11 @@
   - [x] #19 traced (2026-11-12 15:53): `route('서울역','강남')` returned no paths because `find()` stripped '역'. Fixed: retry with '역' added, clear error if no name form matches (BUILD_GUIDE Step 11b, 77 tests)
   - [x] Checked live on the Mac (16:04): 서울역 -> 강남, 30 min, 11 stops, 1 transfer at 사당
   - [x] Rerun #19 (2026-11-13 13:47, gemini-3.5-flash): pass, 11 stops, 1 transfer at 사당 (`evals/results/2026-11-13_1347.md`)
-  - [ ] Full run pinned to one model, e.g. `GEMINI_MODEL=gemini-3.5-flash` (33 cases now)
+  - [~] Full run pinned to gemini-3.5-flash, in daily batches (free tier allows about 20-25 calls a day)
+    - [x] 2026-11-13 14:30: 0/33, all errors (503, then 429 quota)
+    - [x] 2026-11-14 19:32: 10/10 graded pass (cases 1-10: weather 5/5, air 4/4, coverage 1/1); 11-33 hit 429 (`evals/results/2026-11-14_1932.json`)
+    - [ ] Sun: `--rerun evals/results/2026-11-14_1932.json --only 11-21 --delay 15`
+    - [ ] Mon: rerun the newest file with `--only 22-33`
 - [x] Subway arrivals cache, 30 s per station, `SUBWAY_CACHE_SECONDS` (BUILD_GUIDE Step 12, 82 tests)
 - [~] Phase 5: remote MCP (Streamable HTTP) deploy, README with GIF + eval scores
   - [x] Host decided: Cloud Run, asia-northeast3 (Seoul)
@@ -97,7 +105,8 @@
   - [x] README draft: architecture, tools, briefing, evals, gotchas (2026-11-13)
   - [ ] README: add the GIF and the final eval score
   - [x] Repo prepared for GitHub: secret scan clean, `.gitignore` extended (BUILD_GUIDE Step 18)
-  - [ ] Push to GitHub (`git init`, `gh repo create ... --public --push`)
+  - [x] Pushed to GitHub 2026-11-13: github.com/Jay02510/seoul-commute-mcp
+  - [ ] Commit and push Steps 19-21
   - [x] Case study doc drafted (Claude Docs, 2026-11-13)
 
 ## Handoff (2026-11-12 17:10, end of chat "Gemini LLM eval failures")
@@ -130,8 +139,12 @@ Reminder: paste shell commands without trailing `# comments` (zsh passes them as
 - Seoul sign-up: use 외국인회원 path; 내국인 path rejects foreign phone verification.
 - SQLite needs to delete its `-journal` file after each write. In Claude's VM, writes failed with `disk I/O error` until file deletion was approved. A leftover `briefing.db-journal` rolls back by itself on the next open on the Mac; don't delete it by hand.
 
+## Done 2026-11-14
+- [x] English station names in `next_trains` and `route` (`sources/stations.py`, BUILD_GUIDE Step 20)
+- [x] Eval runner stops after 3 quota errors in a row; `--only 11-21` ranges
+- [ ] Redeploy the MCP service for English names (Step 14 command)
+
 ## Ideas backlog
 - Nearest AirKorea station via 측정소정보 (getTMStdrCrdnt + getNearbyMsrstnList)
 - Seoul 실시간 도시데이터 (120+ hotspots, congestion)
 - Subway fare API (서울교통공사 실시간운임정보)
-- English station name normalizer (Gangnam to 강남)

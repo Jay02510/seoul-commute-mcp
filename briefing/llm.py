@@ -24,6 +24,8 @@ from mcp import Client, StdioServerParameters
 
 from sources.districts import DISTRICTS
 
+from .store import kst_now
+
 ROOT = Path(__file__).resolve().parent.parent
 MAX_ROUNDS = 6          # model turns; each turn may call several tools at once
 MAX_TOKENS = 600        # a Telegram briefing is short
@@ -310,9 +312,10 @@ async def ask(system: str, prompt: str, verbose: bool = False, extra_env: dict |
     return text, log
 
 
+
 async def write(route, now: datetime | None = None, verbose: bool = False) -> str:
     """Return the briefing text written by the LLM. Raises on any failure, so
     the caller can fall back to the rule-based writer."""
-    now = now or datetime.now()
+    now = now or kst_now()
     text, _ = await ask(SYSTEM, user_prompt(route, now), verbose=verbose)
     return text

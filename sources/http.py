@@ -27,7 +27,11 @@ def check_name(name: str) -> str:
     """Clean a station name from a tool call: trim, drop a trailing '역', and
     reject empty or overlong input. The name goes into the Seoul API's URL path,
     so it is also percent-encoded with safe="" by the caller (no '/' escapes)."""
-    name = (name or "").strip().removesuffix("역")
+    from .stations import to_korean  # English names ('Gangnam') -> '강남'
+    name = (name or "").strip()
+    if len(name) > 2 * MAX_NAME:          # English names run longer than Korean ones
+        raise ValueError(f"station name too long (max {MAX_NAME} characters)")
+    name = to_korean(name).removesuffix("역") if name else name
     if not name:
         raise ValueError("station name is empty")
     if len(name) > MAX_NAME:

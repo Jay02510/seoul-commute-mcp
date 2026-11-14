@@ -41,3 +41,15 @@ def test_cases_file_is_valid():
         named = set(c.get("tools_all", [])) | set(c.get("min_calls", {})) | set(c.get("args", {})) | set(c.get("fail", []))
         assert named <= tools, c["id"]
         assert c.get("tools_all") or c.get("must") or c.get("grounded"), f"case {c['id']} checks nothing"
+
+
+def test_parse_ids_and_quota_helpers():
+    from evals import run
+    assert run.parse_ids("11-14,20") == {11, 12, 13, 14, 20}
+    assert run.parse_ids("3, 1") == {1, 3}
+    assert run.quota_hit({"status": "error", "error": "LLMError: ... 429 RESOURCE_EXHAUSTED"})
+    assert not run.quota_hit({"status": "error", "error": "LLMError: ... 503 UNAVAILABLE"})
+    assert not run.quota_hit({"status": "pass"})
+    skipped = run.not_run({"id": 5, "question": "q", "category": "air"})
+    assert skipped["status"] == "error" and skipped["tools"] == []
+

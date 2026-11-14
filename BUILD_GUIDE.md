@@ -32,6 +32,8 @@ explanation.
 | **단기예보 (short-term forecast)** | KMA's hourly forecast for about the next 3 days on the same 5 km grid, issued 8 times a day (02, 05, 08, 11, 14, 17, 20, 23 h) and online about 10 minutes later. |
 | **POP** | Probability of precipitation: KMA's chance of rain for an hour, in percent. The briefing treats 60% or more as "rain likely". |
 | **Send window** | The span in which a route's briefing may still go out: from its send time until 3 h 15 min later. A run outside it skips the route, so a Mac that wakes at noon doesn't send a stale morning briefing. |
+| **Cloud Run job** | A container that runs once to the end and stops, instead of a service that waits for requests. Billed only while it runs. |
+| **Cloud Scheduler** | Google Cloud's cron: calls a URL on a schedule (here, the Cloud Run job's `:run` endpoint at 07:45 and 18:00, Seoul time). |
 | **MCP server** | A program that exposes *tools* (functions the AI can call). This project is an MCP server. |
 | **MCP client / host** | The AI app that connects to servers and lets the model call their tools: Claude Desktop, Cursor, ChatGPT connectors, etc. |
 | **Tool** | One function the model can call, e.g. `air_quality(district)`. The model reads the tool's name, parameters and description to decide when to use it. |
@@ -1604,7 +1606,7 @@ Claude.ai connector gets the `forecast` tool and the new air grades.
 shower in the forecast, while the observation API uses 5-7 for drizzle and
 flurries. Keep the two maps separate (`PTY` and `FCST_PTY`).
 
-## Step 18: Prepare the repository for GitHub  *(prepared; push pending)*
+## Step 18: Prepare the repository for GitHub  ✅ *(pushed 2026-11-13: github.com/Jay02510/seoul-commute-mcp)*
 
 **Checked (2026-11-13).** A script compared every value in `.env` against every
 file in the project (outside `.venv`) and searched for `serviceKey=`, `key=` and
@@ -1667,20 +1669,133 @@ cp launchd/com.jasonbenjamin.seoul-briefing.plist ~/Library/LaunchAgents/
 launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.jasonbenjamin.seoul-briefing.plist
 ```
 
+**Fix after the first `preview home` (14:26).** The route was right (2호선
+toward 교대, 17 stops, no transfers), but the briefing said "☂️ Take an umbrella
+for later (05:00)": the 15-hour forecast window reached into the next morning.
+The briefing now uses only today's forecast hours up to 22:00 (`LATER_UNTIL` in
+`compose.py`), so the morning run covers the trip home and the evening run
+covers the evening. The MCP `forecast` tool is unchanged. 129 tests.
+
 **Gotcha.** `pmset repeat` holds one wake time only, so the 07:40 wake from
 Step 15 can't also cover 18:00. If the Mac is asleep at 18:00, the evening
 briefing goes out when it wakes (until 21:15). A permanent fix is to run the
 briefing in the cloud (Cloud Run job + Cloud Scheduler) instead of on the Mac.
 
+## Step 20: English station names, and an eval runner that stops on quota  ✅
+
+**English names.** `sources/stations.py` maps about 120 English names and
+spellings to the Korean names the APIs expect: `Gangnam` → `강남`,
+`Hongik Univ. Station` / `Hongdae` → `홍대입구`, `Seoul Station` → `서울`,
+`Euljiro 1(il)-ga` → `을지로입구`, `COEX` → `삼성`. Matching ignores case,
+punctuation, "station", "line 2" and bracketed parts, and reads `univ.` as
+`university`. `check_name()` calls it, so `next_trains` and `route` both accept
+English. Korean passes through unchanged. An unknown English name returns a
+clear error ("use the Korean name"), so the model retries in Korean instead of
+the API failing on a Latin name. The tool docstrings now say English works.
+
+Gotcha: the security test used `../../x` to prove `/` is encoded; `x` is now an
+unknown English name and is refused earlier, so the test uses `../../가`.
+
+**Eval runner.** After 3 quota errors (429) in a row the run stops, marks the
+remaining cases "not run: daily quota reached" (so `--rerun` picks them up) and
+says so. `--only` accepts ranges (`--only 11-21`). The free tier allows only
+about 20-25 Gemini calls a day, so the full run is done in daily batches:
+
+```
+GEMINI_MODEL=gemini-3.5-flash uv run python -m evals.run --rerun evals/results/2026-11-14_1932.json --only 11-21 --delay 15
+```
+
+Then the next day, the newest results file with `--only 22-33`.
+
+## Step 21: Briefing as a Cloud Run job  *(code ready; deploy pending)*
+
+**Why.** launchd needs the Mac awake, and `pmset` can wake it only once a day.
+A Cloud Run job started by Cloud Scheduler sends both briefings on time with
+the Mac off.
+
+**Design.** The same Docker image as the MCP server (it now also copies
+`briefing/` and `deploy/routes.json`) runs as a job with a different command:
+`python -m briefing.main run --routes-file deploy/routes.json`. There is no
+database in the cloud, so routes come from `deploy/routes.json` and there is no
+send log: Cloud Scheduler fires once at 07:45 and once at 18:00, the job never
+retries (`--max-retries 0`), and each route's send window decides which one
+goes out. `store.kst_now()` gives Seoul time, because the container runs in UTC
+(the briefing's "today" and send windows used the machine's local time before).
+The LLM writer is not in the image, so the cloud job uses the rules writer.
+
+**1. Telegram secrets** (check that the `.env` values have no quotes first):
+
+```
+cd ~/Projects/seoul-commute-mcp
+```
+```
+grep '^TELEGRAM_BOT_TOKEN=' .env | cut -d= -f2- | tr -d '\n' | gcloud secrets create TELEGRAM_BOT_TOKEN --data-file=-
+```
+```
+grep '^TELEGRAM_CHAT_ID=' .env | cut -d= -f2- | tr -d '\n' | gcloud secrets create TELEGRAM_CHAT_ID --data-file=-
+```
+
+**2. Deploy the job** (builds the image from source, about 3-5 minutes):
+
+```
+gcloud run jobs deploy seoul-briefing --source ~/Projects/seoul-commute-mcp --region asia-northeast3 --command python --args=-m,briefing.main,run,--routes-file,deploy/routes.json --set-secrets DATA_GO_KR_KEY=DATA_GO_KR_KEY:latest,SEOUL_API_KEY=SEOUL_API_KEY:latest,TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN:latest,TELEGRAM_CHAT_ID=TELEGRAM_CHAT_ID:latest --max-retries 0 --task-timeout 120s --memory 512Mi
+```
+
+**3. Test it now** (`--force` sends both routes whatever the time):
+
+```
+gcloud run jobs execute seoul-briefing --region asia-northeast3 --args=-m,briefing.main,run,--routes-file,deploy/routes.json,--force --wait
+```
+
+Two messages should arrive on Telegram.
+
+**4. Schedule it:**
+
+```
+gcloud services enable cloudscheduler.googleapis.com
+```
+```
+SA=$(gcloud projects describe seoul-mcp --format='value(projectNumber)')-compute@developer.gserviceaccount.com
+```
+```
+gcloud run jobs add-iam-policy-binding seoul-briefing --region asia-northeast3 --member serviceAccount:$SA --role roles/run.invoker
+```
+```
+gcloud scheduler jobs create http seoul-briefing-morning --location asia-northeast3 --schedule "45 7 * * 1-5" --time-zone Asia/Seoul --uri "https://run.googleapis.com/v2/projects/seoul-mcp/locations/asia-northeast3/jobs/seoul-briefing:run" --http-method POST --oauth-service-account-email $SA
+```
+```
+gcloud scheduler jobs create http seoul-briefing-evening --location asia-northeast3 --schedule "0 18 * * 1-5" --time-zone Asia/Seoul --uri "https://run.googleapis.com/v2/projects/seoul-mcp/locations/asia-northeast3/jobs/seoul-briefing:run" --http-method POST --oauth-service-account-email $SA
+```
+
+Check the plumbing without waiting: `gcloud scheduler jobs run seoul-briefing-morning --location asia-northeast3`
+starts the job; outside a send window it sends nothing and logs `nothing due`
+(Cloud Run > Jobs > seoul-briefing > Logs).
+
+**5. Retire launchd**, or both the Mac and the cloud will send:
+
+```
+launchctl bootout gui/$(id -u)/com.jasonbenjamin.seoul-briefing
+```
+
+`briefing.db` stays for `preview` and `compare` on the Mac.
+
+**Cost.** Cloud Scheduler: 3 jobs free per billing account (this uses 2).
+The job runs for a few seconds twice a weekday, inside Cloud Run's free tier.
+
+**Gotchas.**
+- Routes now live in two places: `briefing.db` on the Mac and
+  `deploy/routes.json` for the cloud. To change a cloud route, edit the JSON
+  and run the Step 2 command again.
+- Redeploy the MCP service too (Step 14 command): the English names are in
+  `server.py`'s code path.
+
 ## Next steps
 
-- On the Mac: `uv run python tests/record_fixtures.py`, `uv run pytest`, `uv run -m briefing.main preview work` (Step 17).
-- Run `sudo pmset repeat wakeorpoweron MTWRF 07:40:00` and check Monday's message arrives at 07:45 (Step 15).
-- Full eval run pinned to one model (`GEMINI_MODEL=gemini-3.5-flash uv run python -m evals.run`), 33 cases, for the README score.
-- Budget alert in the console (Billing > Budgets & alerts, US$5, 50% and 100%).
-- README: record the Claude.ai connector GIF, fill in the eval score.
-- Push to GitHub (Step 18).
-- Add the `home` route and reload launchd (Step 19).
+- Eval batches: Sunday `--only 11-21`, Monday `--only 22-33` (Step 20); then the score in README and the case study.
+- Cloud briefing: secrets, job, test, scheduler, retire launchd (Step 21).
+- Redeploy the MCP service (Step 14 command) for English station names.
+- Commit and push the Step 19-21 changes.
+- README GIF; budget alert in the console.
 
 ---
 
@@ -1737,3 +1852,7 @@ briefing in the cloud (Cloud Run job + Cloud Scheduler) instead of on the Mac.
 - 2026-11-13: Step 18: secret scan clean, portal user names removed, `.gitignore` extended; push commands written.
 - 2026-11-13: Step 19: per-route send time (`at`, send window, `set-time`), plist fires at 07:45 and 18:00 on weekdays. 128 tests.
 - 2026-11-13: Case study doc drafted (Claude Docs).
+- 2026-11-13: Briefing forecast limited to today's hours up to 22:00 (an afternoon preview warned about rain at 05:00 the next day). 129 tests.
+- 2026-11-14: Step 20: English station names (`sources/stations.py`, via `check_name`); eval runner stops after 3 quota errors in a row, `--only` takes ranges.
+- 2026-11-14: Step 21: briefing as a Cloud Run job (`run --routes-file`, `deploy/routes.json`, `kst_now()`, image copies `briefing/`), Cloud Scheduler commands. 147 tests.
+- 2026-11-14: Step 18 marked done: repo was pushed 2026-11-13.

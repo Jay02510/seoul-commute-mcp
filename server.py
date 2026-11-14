@@ -149,8 +149,9 @@ async def air_quality(district: str) -> str:
 async def next_trains(station: str, per_direction: int = 2) -> str:
     """Next arriving Seoul subway trains at a station, with direction and ETA.
 
-    station: station name in KOREAN without '역', e.g. '강남', '홍대입구', '서울'.
-    Translate English names to Korean before calling (Gangnam -> 강남, Hongik Univ -> 홍대입구).
+    station: station name, Korean preferred ('강남', '홍대입구', '서울'). Common English
+    names also work ('Gangnam', 'Hongik Univ.', 'Seoul Station'); if one is
+    rejected, retry with the Korean name.
     per_direction: trains to show for each line and direction (1-3, default 2).
     Every line and direction serving the station is always included.
 
@@ -182,8 +183,9 @@ async def route(from_station: str, to_station: str, prefer: str = "fastest") -> 
     in next_trains), stop counts, transfers with walking time, departure and
     arrival times, total minutes and card fare.
 
-    from_station / to_station: station names in KOREAN without '역', e.g. '홍대입구',
-    '강남'. Translate English names first (Hongik Univ -> 홍대입구, Gangnam -> 강남).
+    from_station / to_station: station names, Korean preferred ('홍대입구', '강남');
+    common English names also work ('Hongdae', 'Gangnam'); if one is rejected,
+    retry with the Korean name.
     If the user gives a district or neighbourhood, pick its main station and say so.
     prefer: 'fastest' (default), 'fewest_transfers' or 'shortest'.
     Times assume the next train from now; pair with next_trains for live arrivals.

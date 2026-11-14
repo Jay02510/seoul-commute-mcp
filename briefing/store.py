@@ -3,9 +3,11 @@
 The send log stops duplicates: if launchd fires twice in one day (e.g. after
 the Mac wakes from sleep), each route is still sent only once.
 """
+import json
 import sqlite3
 from datetime import date, datetime, timedelta
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 from sources.districts import resolve
 
@@ -62,6 +64,40 @@ def _station(name: str) -> str:
 # A briefing that arrives this long after its time is stale (the Mac woke late):
 # skip it. 07:45 + 3 h 15 = 11:00, the old fixed cut-off.
 LATE_WINDOW = timedelta(hours=3, minutes=15)
+
+
+KST = ZoneInfo("Asia/Seoul")
+
+
+def kst_now() -> datetime:
+    """Seoul wall-clock time without tzinfo. On the Mac this is just now();
+    in a Cloud Run container (UTC) it keeps send windows and 'today' right."""
+    return datetime.now(KST).replace(tzinfo=None)
+
+
+def in_window(route, now: datetime) -> bool:
+    """True from the route's send time until LATE_WINDOW after it, on its days."""
+    if WEEKDAYS[now.weekday()] not in route["days"].split(","):
+        return False
+    start = datetime.combine(now.date(), datetime.strptime(send_time(route), "%H:%M").time())
+    return start <= now < start + LATE_WINDOW
+
+
+def load_routes_file(path) -> list[dict]:
+    """Routes from a JSON file (for the cloud job, which has no briefing.db):
+    a list of objects with name, home, work, station and optional toward,
+    dest, days, at. Normalised the same way as add_route."""
+    out = []
+    for r in json.loads(Path(path).read_text(encoding="utf-8")):
+        days = [d.strip().lower()[:3] for d in r.get("days", "mon,tue,wed,thu,fri").split(",") if d.strip()]
+        bad = [d for d in days if d not in WEEKDAYS]
+        if bad:
+            raise ValueError(f"route {r.get('name')!r}: unknown day(s) {bad}")
+        out.append({"id": None, "name": r["name"], "home": resolve(r["home"]), "work": resolve(r["work"]),
+                    "station": _station(r["station"]), "toward": _station(r.get("toward", "")),
+                    "dest": _station(r.get("dest", "")), "days": ",".join(days),
+                    "at": check_time(r.get("at", "07:45")), "active": 1})
+    return out
 
 
 def check_time(at: str) -> str:
@@ -142,10 +178,7 @@ def due_routes(con, now: date | datetime) -> list[sqlite3.Row]:
     ).fetchall()
     rows = [r for r in rows if wd in r["days"].split(",")]
     if isinstance(now, datetime):
-        def in_window(r) -> bool:
-            start = datetime.combine(today, datetime.strptime(send_time(r), "%H:%M").time())
-            return start <= now < start + LATE_WINDOW
-        rows = [r for r in rows if in_window(r)]
+        rows = [r for r in rows if in_window(r, now)]
     return rows
 
 

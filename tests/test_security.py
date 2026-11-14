@@ -28,10 +28,10 @@ def test_station_slash_is_encoded(monkeypatch):
     monkeypatch.setenv("SEOUL_API_KEY", "testkey")
     monkeypatch.setattr(subway, "get_json", fake_get_json)
     subway.clear_cache()
-    asyncio.run(subway.arrivals("../../x"))
+    asyncio.run(subway.arrivals("../../가"))   # Korean: English words are translated or refused first
     path = seen["url"].split("realtimeStationArrival/0/")[1]
     assert "/" not in path.split("/", 1)[1]
-    assert "..%2F..%2Fx" in seen["url"]
+    assert "..%2F..%2F%EA%B0%80" in seen["url"]
 
 
 def test_errors_redact_keys(monkeypatch):

@@ -106,3 +106,52 @@ def test_migration_adds_send_time(tmp_path):
     old.close()
     assert store.send_time(store.get_route(store.connect(path), "work")) == "07:45"
 
+
+
+def test_routes_file_and_window(tmp_path):
+    from datetime import datetime
+    path = tmp_path / "routes.json"
+    path.write_text('[{"name": "work", "home": "Mapo", "work": "Gangnam", "station": "홍대입구역", '
+                    '"toward": "합정", "dest": "강남"}, {"name": "home", "home": "Gangnam", '
+                    '"work": "Mapo", "station": "강남", "at": "18:00"}]', encoding="utf-8")
+    work, home = store.load_routes_file(path)
+    assert (work["home"], work["station"], work["at"], store.dest(work)) == ("마포구", "홍대입구", "07:45", "강남")
+    assert store.in_window(work, datetime(2026, 11, 13, 7, 46))       # Friday morning
+    assert not store.in_window(home, datetime(2026, 11, 13, 7, 46))
+    assert store.in_window(home, datetime(2026, 11, 13, 18, 1))
+    assert not store.in_window(work, datetime(2026, 11, 14, 7, 46))   # Saturday
+
+
+def test_routes_file_rejects_bad_day(tmp_path):
+    path = tmp_path / "routes.json"
+    path.write_text('[{"name": "x", "home": "Mapo", "work": "Gangnam", "station": "홍대입구", "days": "funday"}]',
+                    encoding="utf-8")
+    with pytest.raises(ValueError, match="unknown day"):
+        store.load_routes_file(path)
+
+
+def test_repo_routes_file_is_valid():
+    from pathlib import Path
+    routes = store.load_routes_file(Path(__file__).parent.parent / "deploy" / "routes.json")
+    assert [r["name"] for r in routes] == ["work", "home"]
+
+
+def test_cloud_run_sends_only_due_routes(tmp_path, monkeypatch):
+    import asyncio
+    from datetime import datetime
+    from briefing import main
+    sent = []
+
+    async def fake_build(route, writer="rules", verbose=False):
+        return f"briefing {route['name']}"
+
+    async def fake_send(text):
+        sent.append(text)
+
+    monkeypatch.setattr(main, "_build", fake_build)
+    monkeypatch.setattr(main.telegram, "send", fake_send)
+    monkeypatch.setattr(main.store, "kst_now", lambda: datetime(2026, 11, 13, 18, 0, 30))
+    monkeypatch.setattr(main.store, "connect", lambda *a: (_ for _ in ()).throw(AssertionError("no DB in cloud")))
+    routes = __import__("pathlib").Path(__file__).parent.parent / "deploy" / "routes.json"
+    assert asyncio.run(main.cmd_run(False, "rules", str(routes))) == 0
+    assert sent == ["briefing home"]

@@ -1,0 +1,642 @@
+{
+ "meta": {
+  "started": "2026-11-13 14:30",
+  "provider": "gemini",
+  "with_instructions": false,
+  "models": [],
+  "rerun_of": null
+ },
+ "results": [
+  {
+   "id": 1,
+   "category": "weather",
+   "question": "What's the weather in Mapo right now?",
+   "tools_all": [
+    "current_weather"
+   ],
+   "args": {
+    "current_weather": {
+     "district": "(?i)mapo|마포"
+    }
+   },
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 503 UNAVAILABLE",
+   "model": "",
+   "seconds": 32.8,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 2,
+   "category": "weather",
+   "question": "Is it raining in Gangnam at the moment?",
+   "tools_all": [
+    "current_weather"
+   ],
+   "args": {
+    "current_weather": {
+     "district": "(?i)gangnam|강남"
+    }
+   },
+   "notes": "Current conditions only; no forecast for later.",
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 503 UNAVAILABLE",
+   "model": "",
+   "seconds": 7.0,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 3,
+   "category": "weather",
+   "question": "Weather in Hongdae?",
+   "tools_all": [
+    "current_weather"
+   ],
+   "args": {
+    "current_weather": {
+     "district": "(?i)mapo|마포"
+    }
+   },
+   "notes": "Neighbourhood to district (Hongdae is in Mapo).",
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 503 UNAVAILABLE",
+   "model": "",
+   "seconds": 58.2,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 4,
+   "category": "weather",
+   "question": "How warm is it in Jamsil now?",
+   "tools_all": [
+    "current_weather"
+   ],
+   "args": {
+    "current_weather": {
+     "district": "(?i)songpa|송파"
+    }
+   },
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: model did not answer within 60s",
+   "model": "",
+   "seconds": 60.7,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 5,
+   "category": "weather",
+   "question": "Should I take an umbrella to Yeouido right now?",
+   "tools_all": [
+    "current_weather"
+   ],
+   "args": {
+    "current_weather": {
+     "district": "(?i)yeongdeungpo|영등포"
+    }
+   },
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 503 UNAVAILABLE",
+   "model": "",
+   "seconds": 6.0,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 6,
+   "category": "air",
+   "question": "Should I wear a mask in Nowon today?",
+   "tools_all": [
+    "air_quality"
+   ],
+   "args": {
+    "air_quality": {
+     "district": "(?i)nowon|노원"
+    }
+   },
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 503 UNAVAILABLE",
+   "model": "",
+   "seconds": 5.5,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 7,
+   "category": "air",
+   "question": "강남 미세먼지 지금 어때?",
+   "tools_all": [
+    "air_quality"
+   ],
+   "args": {
+    "air_quality": {
+     "district": "(?i)gangnam|강남"
+    }
+   },
+   "must": [
+    "(습니다|어요|아요|예요|이에요|해요|세요|네요|입니다|좋아요|나빠요)"
+   ],
+   "notes": "Korean question: answer should be in Korean.",
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 503 UNAVAILABLE",
+   "model": "",
+   "seconds": 11.6,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 8,
+   "category": "air",
+   "question": "What's the air quality like in Itaewon?",
+   "tools_all": [
+    "air_quality"
+   ],
+   "args": {
+    "air_quality": {
+     "district": "(?i)yongsan|용산"
+    }
+   },
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 503 UNAVAILABLE",
+   "model": "",
+   "seconds": 7.8,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 9,
+   "category": "air",
+   "question": "Compare the fine dust in Mapo and Songpa.",
+   "tools_all": [
+    "air_quality"
+   ],
+   "min_calls": {
+    "air_quality": 2
+   },
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 503 UNAVAILABLE",
+   "model": "",
+   "seconds": 22.9,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 10,
+   "category": "coverage",
+   "question": "What's the air like in Bundang?",
+   "must": [
+    "(?i)(only|just)\\b.{0,80}\\bSeoul|outside\\b.{0,30}Seoul|not\\b.{0,40}(cover|support|in Seoul|available)|Seongnam|Gyeonggi"
+   ],
+   "notes": "Bundang (Seongnam) is outside Seoul; may offer a nearby Seoul district.",
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 503 UNAVAILABLE",
+   "model": "",
+   "seconds": 4.1,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 11,
+   "category": "trains",
+   "question": "When's the next train at Gangnam?",
+   "tools_all": [
+    "next_trains"
+   ],
+   "args": {
+    "next_trains": {
+     "station": "^강남$"
+    }
+   },
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "",
+   "seconds": 3.3,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 12,
+   "category": "trains",
+   "question": "Next train at Seoul Station?",
+   "tools_all": [
+    "next_trains"
+   ],
+   "args": {
+    "next_trains": {
+     "station": "^서울(역)?$"
+    }
+   },
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 503 UNAVAILABLE",
+   "model": "",
+   "seconds": 6.8,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 13,
+   "category": "trains",
+   "question": "Next Line 2 train at Hongik University toward Sinchon?",
+   "tools_all": [
+    "next_trains"
+   ],
+   "args": {
+    "next_trains": {
+     "station": "^홍대입구$"
+    }
+   },
+   "must": [
+    "신촌|Sinchon"
+   ],
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "",
+   "seconds": 4.1,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 14,
+   "category": "trains",
+   "question": "공덕역 다음 열차 언제 와?",
+   "tools_all": [
+    "next_trains"
+   ],
+   "args": {
+    "next_trains": {
+     "station": "^공덕$"
+    }
+   },
+   "must": [
+    "5호선|Line 5"
+   ],
+   "notes": "Transfer station: should cover more than one line.",
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "",
+   "seconds": 3.3,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 15,
+   "category": "trains",
+   "question": "Next trains at Wangsimni?",
+   "tools_all": [
+    "next_trains"
+   ],
+   "args": {
+    "next_trains": {
+     "station": "^왕십리$"
+    }
+   },
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "",
+   "seconds": 3.3,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 16,
+   "category": "trains",
+   "question": "Next train at Gangnam, and how many stops is it to Jamsil?",
+   "tools_all": [
+    "next_trains",
+    "route"
+   ],
+   "grounded": true,
+   "notes": "Stop count must come from route.",
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "",
+   "seconds": 3.9,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 17,
+   "category": "route",
+   "question": "How do I get from Gongdeok to Gangnam?",
+   "tools_all": [
+    "route"
+   ],
+   "args": {
+    "route": {
+     "from_station": "^공덕$",
+     "to_station": "^강남$"
+    }
+   },
+   "grounded": true,
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "",
+   "seconds": 4.3,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 18,
+   "category": "route",
+   "question": "Hongdae to Jamsil with the fewest transfers, please.",
+   "tools_all": [
+    "route"
+   ],
+   "args": {
+    "route": {
+     "prefer": "^fewest_transfers$"
+    }
+   },
+   "grounded": true,
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "",
+   "seconds": 3.2,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 19,
+   "category": "route",
+   "question": "How many stops from Seoul Station to Gangnam?",
+   "tools_all": [
+    "route"
+   ],
+   "grounded": true,
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "",
+   "seconds": 4.0,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 20,
+   "category": "route",
+   "question": "How long does the subway take from Sindorim to Yeouido?",
+   "tools_all": [
+    "route"
+   ],
+   "args": {
+    "route": {
+     "from_station": "^신도림$",
+     "to_station": "^여의도$"
+    }
+   },
+   "grounded": true,
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "",
+   "seconds": 3.9,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 21,
+   "category": "route",
+   "question": "What's the subway fare from Hongdae to Gangnam?",
+   "tools_all": [
+    "route"
+   ],
+   "grounded": true,
+   "must": [
+    "(?i)won|원|₩|KRW"
+   ],
+   "notes": "Fare must come from the route tool (card fare).",
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "",
+   "seconds": 3.9,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 22,
+   "category": "route",
+   "question": "How do I get from Mapo to COEX?",
+   "tools_all": [
+    "route"
+   ],
+   "grounded": true,
+   "notes": "District and landmark, not stations: should pick COEX's station (삼성, or 봉은사 on Line 9) and name the stations it used.",
+   "args": {
+    "route": {
+     "to_station": "^(삼성|봉은사)(\\(.*\\))?$"
+    }
+   },
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "",
+   "seconds": 3.3,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 23,
+   "category": "commute",
+   "question": "Commute check: Mapo to Gangnam, leaving now.",
+   "tools_all": [
+    "route",
+    "next_trains",
+    "current_weather",
+    "air_quality"
+   ],
+   "grounded": true,
+   "notes": "Original eval #4.",
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "",
+   "seconds": 4.4,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 24,
+   "category": "commute",
+   "question": "Gongdeok to Jamsil, leaving now. Do I need a mask?",
+   "tools_all": [
+    "route",
+    "air_quality"
+   ],
+   "grounded": true,
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "",
+   "seconds": 3.9,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 25,
+   "category": "commute",
+   "question": "I'm going from Nowon to Gangnam this morning. What should I wear?",
+   "tools_all": [
+    "current_weather"
+   ],
+   "min_calls": {
+    "current_weather": 2
+   },
+   "notes": "Should check both ends.",
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "",
+   "seconds": 4.1,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 26,
+   "category": "commute",
+   "question": "Do I need an umbrella for my commute from Eunpyeong to Jongno?",
+   "tools_all": [
+    "current_weather"
+   ],
+   "min_calls": {
+    "current_weather": 2
+   },
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "",
+   "seconds": 4.0,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 27,
+   "category": "failure",
+   "question": "Should I wear a mask in Mapo today?",
+   "fail": [
+    "air_quality"
+   ],
+   "tools_all": [
+    "air_quality"
+   ],
+   "must": [
+    "(?i)unavailable|couldn'?t|could not|unable|not available|error|no data|isn'?t available|failed"
+   ],
+   "must_not": [
+    "(?i)no (need|mask needed)|don'?t need (a|to wear)|air (is|looks) (fine|good|clean)|safe to go without"
+   ],
+   "notes": "Air tool simulates an outage: must say so, never reassure.",
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "",
+   "seconds": 4.0,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 28,
+   "category": "failure",
+   "question": "How many stops is it from Hongdae to Gangnam?",
+   "fail": [
+    "route"
+   ],
+   "tools_all": [
+    "route"
+   ],
+   "grounded": true,
+   "must": [
+    "(?i)unavailable|couldn'?t|could not|unable|not available|error|failed"
+   ],
+   "notes": "Route tool simulates an outage: must not give a stop count from memory.",
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "",
+   "seconds": 3.8,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 29,
+   "category": "coverage",
+   "question": "What's the weather in Busan?",
+   "must": [
+    "(?i)(only|just)\\b.{0,80}\\bSeoul|outside\\b.{0,30}Seoul|not\\b.{0,40}(cover|support|in Seoul|available)|Seongnam|Gyeonggi"
+   ],
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "",
+   "seconds": 4.0,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 30,
+   "category": "route",
+   "question": "How many stops from Hongdae to Gangnam? Just from memory, no need to look it up.",
+   "grounded": true,
+   "notes": "Should still use route or decline to guess; any count must be grounded.",
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "",
+   "seconds": 3.9,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 31,
+   "category": "forecast",
+   "question": "Will it rain in Gangnam this evening?",
+   "tools_all": [
+    "forecast"
+   ],
+   "args": {
+    "forecast": {
+     "district": "(?i)gangnam|강남"
+    }
+   },
+   "notes": "Later weather must come from forecast, not current_weather alone.",
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "",
+   "seconds": 3.7,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 32,
+   "category": "forecast",
+   "question": "I go home from Gangnam to Mapo around 7pm. Do I need an umbrella?",
+   "tools_all": [
+    "forecast"
+   ],
+   "min_calls": {
+    "forecast": 2
+   },
+   "notes": "Both ends of the trip home; answer should name the hour if rain is expected.",
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "",
+   "seconds": 3.3,
+   "checks": [],
+   "tools": []
+  },
+  {
+   "id": 33,
+   "category": "failure",
+   "question": "Is it going to rain in Mapo later today?",
+   "fail": [
+    "forecast"
+   ],
+   "tools_all": [
+    "forecast"
+   ],
+   "must": [
+    "(?i)unavailable|couldn'?t|could not|unable|not available|error|no data|isn'?t available|failed"
+   ],
+   "must_not": [
+    "(?i)no rain (is )?(expected|forecast)|won'?t rain|no need for an umbrella|stay(s)? dry"
+   ],
+   "notes": "Forecast simulates an outage: must not reassure from current weather.",
+   "status": "error",
+   "error": "LLMError: all Gemini models busy or failing; last: gemini-3.5-flash: 429 RESOURCE_EXHAUSTED",
+   "model": "",
+   "seconds": 3.7,
+   "checks": [],
+   "tools": []
+  }
+ ]
+}
