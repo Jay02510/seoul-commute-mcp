@@ -81,8 +81,9 @@
   - [~] Full run pinned to gemini-3.5-flash, in daily batches (free tier allows about 20-25 calls a day)
     - [x] 2026-11-13 14:30: 0/33, all errors (503, then 429 quota)
     - [x] 2026-11-14 19:32: 10/10 graded pass (cases 1-10: weather 5/5, air 4/4, coverage 1/1); 11-33 hit 429 (`evals/results/2026-11-14_1932.json`)
-    - [ ] Sun: `--rerun evals/results/2026-11-14_1932.json --only 11-21 --delay 15`
-    - [ ] Mon: rerun the newest file with `--only 22-33`
+    - [x] 2026-11-15 18:05: 20/33 pass, 1 fail, 12 errors (429 from #22). trains 6/6, route 4/7 so far (`evals/results/2026-11-15_1805.json`)
+    - [x] #20 failed only on the args check: the model passed 'Sindorim'/'Yeouido', which the server now translates. Grader now compares station args as the server sees them (148 tests); the next `--rerun` regrades #20
+    - [ ] Mon: `GEMINI_MODEL=gemini-3.5-flash uv run python -m evals.run --rerun evals/results/2026-11-15_1805.json --delay 15` (the 12 errors, 22-33)
 - [x] Subway arrivals cache, 30 s per station, `SUBWAY_CACHE_SECONDS` (BUILD_GUIDE Step 12, 82 tests)
 - [~] Phase 5: remote MCP (Streamable HTTP) deploy, README with GIF + eval scores
   - [x] Host decided: Cloud Run, asia-northeast3 (Seoul)
@@ -108,6 +109,24 @@
   - [x] Pushed to GitHub 2026-11-13: github.com/Jay02510/seoul-commute-mcp
   - [ ] Commit and push Steps 19-21
   - [x] Case study doc drafted (Claude Docs, 2026-11-13)
+
+## Handoff (2026-11-15 18:20, end of chat "Seoul Commute: briefings, forecast, cloud job")
+Done in that chat (2026-11-13 to 15): commute route choice (fewest transfers
+within 5 min), hourly air grades, KMA 단기예보 `forecast` tool, README rewrite,
+case study doc (Claude Docs), evening `home` route with per-route send times,
+English station names, eval runner quota stop, cloud briefing code (Cloud Run
+job), repo on GitHub (github.com/Jay02510/seoul-commute-mcp), MCP service
+redeployed (revision 00006). 148 tests.
+Next steps:
+1. `git push` (a docs commit may be waiting locally; `git status -sb` shows "ahead").
+2. Mon after 17:00 KST: eval rerun of the 12 errors (command above). Then put
+   the score in README and the case study.
+3. Cloud briefing: BUILD_GUIDE Step 21 (Telegram secrets, job deploy, `--force`
+   test, Cloud Scheduler, then `launchctl bootout`). Afterwards update the case
+   study diagram ("launchd" to "Cloud Run job").
+4. README GIF (`docs/demo.gif`) of the Claude.ai connector; budget alert.
+5. Later: compare rules vs LLM writer; disruption alerts; Telegram two-way bot.
+Redeploy the MCP service after server changes: Step 14 command.
 
 ## Handoff (2026-11-12 17:10, end of chat "Gemini LLM eval failures")
 Done in that chat: eval #19 traced to '서울역' (route API keeps '역' in that

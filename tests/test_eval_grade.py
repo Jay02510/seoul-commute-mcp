@@ -53,3 +53,12 @@ def test_parse_ids_and_quota_helpers():
     skipped = run.not_run({"id": 5, "question": "q", "category": "air"})
     assert skipped["status"] == "error" and skipped["tools"] == []
 
+
+def test_english_station_args_count_as_korean():
+    """Eval #20 (2026-11-15) failed only because the model passed 'Sindorim', which the server now translates."""
+    case = {"id": 20, "args": {"route": {"from_station": "^신도림$", "to_station": "^여의도$"}}}
+    log = [("route", {"from_station": "Sindorim", "to_station": "Yeouido"}, "신도림 -> 여의도: 9 min")]
+    assert all(c["ok"] for c in grade(case, "9 min", log))
+    log = [("route", {"from_station": "Atlantis", "to_station": "Yeouido"}, "error")]
+    assert not all(c["ok"] for c in grade(case, "", log))
+

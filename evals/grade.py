@@ -45,6 +45,23 @@ def ungrounded(answer: str, results: list[str]) -> list[str]:
             if not re.search(rf"(?<!\d){re.escape(n)}(?!\d)", haystack)]
 
 
+STATION_ARGS = {"station", "from_station", "to_station"}
+
+
+def _as_server_sees(arg: str, value) -> str:
+    """Station arguments are compared as the server uses them: since Step 20 an
+    English name ('Sindorim') is translated to Korean ('신도림') before any API
+    call, so it counts the same as the Korean name. Unknown names stay as given."""
+    text = str(value if value is not None else "")
+    if arg in STATION_ARGS:
+        try:
+            from sources.stations import to_korean
+            text = to_korean(text.strip())
+        except (ValueError, ImportError):
+            pass
+    return text
+
+
 def grade(case: dict, answer: str, log: list) -> list[dict]:
     """Return [{"check", "ok", "detail"}] for this case. `log` is
     [(tool_name, args, result_text), ...] from briefing.llm.ask."""
@@ -61,7 +78,8 @@ def grade(case: dict, answer: str, log: list) -> list[dict]:
         add(f"{tool} x{n}", k >= n, f"called {k}x")
     for tool, want in case.get("args", {}).items():
         calls = [args for name, args, _ in log if name == tool]
-        ok = any(all(re.search(rx, str(args.get(arg, ""))) for arg, rx in want.items()) for args in calls)
+        ok = any(all(re.search(rx, _as_server_sees(arg, args.get(arg, ""))) for arg, rx in want.items())
+                 for args in calls)
         add(f"{tool} args", ok, "" if ok else f"wanted {want}, got {calls}")
     for rx in case.get("must", []):
         add(f"says /{rx}/", re.search(rx, answer), "")

@@ -1856,3 +1856,4 @@ The job runs for a few seconds twice a weekday, inside Cloud Run's free tier.
 - 2026-11-14: Step 21: briefing as a Cloud Run job (`run --routes-file`, `deploy/routes.json`, `kst_now()`, image copies `briefing/`), Cloud Scheduler commands. 147 tests.
 - 2026-11-14: Step 18 marked done: repo was pushed 2026-11-13.
 - 2026-11-14: MCP service redeployed (revision 00006); English names checked live through the Claude.ai connector.
+- 2026-11-15: Eval batch 2: 20/33 pass so far. Grader compares station arguments after English-to-Korean translation (case #20 had passed 'Sindorim'). 148 tests.
