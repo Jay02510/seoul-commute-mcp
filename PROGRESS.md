@@ -83,7 +83,10 @@
     - [x] 2026-11-14 19:32: 10/10 graded pass (cases 1-10: weather 5/5, air 4/4, coverage 1/1); 11-33 hit 429 (`evals/results/2026-11-14_1932.json`)
     - [x] 2026-11-15 18:05: 20/33 pass, 1 fail, 12 errors (429 from #22). trains 6/6, route 4/7 so far (`evals/results/2026-11-15_1805.json`)
     - [x] #20 failed only on the args check: the model passed 'Sindorim'/'Yeouido', which the server now translates. Grader now compares station args as the server sees them (148 tests); the next `--rerun` regrades #20
-    - [ ] Mon: `GEMINI_MODEL=gemini-3.5-flash uv run python -m evals.run --rerun evals/results/2026-11-15_1805.json --delay 15` (the 12 errors, 22-33)
+    - [x] 2026-11-16 19:01: **28/33 pass**, 1 fail, 4 errors (`evals/results/2026-11-16_1901.json`). weather 5/5, air 4/4, coverage 2/2, trains 6/6, route 7/7, commute 3/4
+    - [x] #24 fail: the model subtracted timetable times to state a 24-minute ride; the grounding check flagged it (right arithmetic, but not a tool number). Fix: `route` now states minutes per ride (`_ride_min`), 149 tests
+    - [ ] Tue: `GEMINI_MODEL=gemini-3.5-flash uv run python -m evals.run --rerun evals/results/2026-11-16_1901.json --only 24,28,31,32,33 --delay 15`
+    - [ ] Redeploy the MCP service (Step 14 command) so the connector gets per-ride minutes
 - [x] Subway arrivals cache, 30 s per station, `SUBWAY_CACHE_SECONDS` (BUILD_GUIDE Step 12, 82 tests)
 - [~] Phase 5: remote MCP (Streamable HTTP) deploy, README with GIF + eval scores
   - [x] Host decided: Cloud Run, asia-northeast3 (Seoul)
@@ -119,8 +122,8 @@ job), repo on GitHub (github.com/Jay02510/seoul-commute-mcp), MCP service
 redeployed (revision 00006). 148 tests.
 Next steps:
 1. `git push` (a docs commit may be waiting locally; `git status -sb` shows "ahead").
-2. Mon after 17:00 KST: eval rerun of the 12 errors (command above). Then put
-   the score in README and the case study.
+2. Tue after 17:00 KST: eval rerun of #24 and the 4 errors (command above).
+   Then put the score in README and the case study (28/33 so far).
 3. Cloud briefing: BUILD_GUIDE Step 21 (Telegram secrets, job deploy, `--force`
    test, Cloud Scheduler, then `launchctl bootout`). Afterwards update the case
    study diagram ("launchd" to "Cloud Run job").

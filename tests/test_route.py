@@ -102,3 +102,15 @@ def test_find_empty_body(fake_get_json):
     fake_get_json(route, {"header": {"resultCode": "00"}, "body": None})
     with pytest.raises(ApiError, match="empty reply"):
         asyncio.run(route.find("홍대입구", "강남"))
+
+
+def test_describe_gives_minutes_per_ride():
+    """Eval #24: the model computed a ride time from timetable times; the tool now states it."""
+    import re
+    from conftest import load
+    from sources import route as r
+    for name in ("route_hongdae_gangnam.json", "route_transfer_sample.json"):
+        text = r.describe(load(name)["body"])
+        rides = [ln for ln in text.splitlines() if ln.startswith("- ") and "Transfer" not in ln]
+        assert rides and all(re.search(r", \d+ min \(\d\d:\d\d-\d\d:\d\d\)$", ln) for ln in rides), text
+

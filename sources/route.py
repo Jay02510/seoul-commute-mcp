@@ -133,6 +133,16 @@ def _hm(t: str | None) -> str:
     return t[:5] if t else "?"
 
 
+def _ride_min(p: dict) -> int:
+    """Minutes on one train. Given in the tool result so the model never works
+    them out itself (eval #24: it subtracted timetable times, and the grounding
+    check rightly flagged a number no tool had returned)."""
+    if p.get("depart") and p.get("arrive"):
+        a, b = (int(t[:2]) * 60 + int(t[3:5]) for t in (p["depart"], p["arrive"]))
+        return (b - a) % (24 * 60)
+    return round((p.get("seconds") or 0) / 60)
+
+
 def describe(body: dict) -> str:
     """Plain-text route for the model or a briefing."""
     parts = legs(body)
@@ -152,8 +162,8 @@ def describe(body: dict) -> str:
         if p["kind"] == "ride":
             to = f", train to {p['terminus']}" if p["terminus"] else ""
             lines.append(f"- {p['line']} from {p['from']} toward {p['toward']}{to}: "
-                         f"{p['stops']} stop{'s' if p['stops'] != 1 else ''} to {p['to']} "
-                         f"({_hm(p['depart'])}-{_hm(p['arrive'])})")
+                         f"{p['stops']} stop{'s' if p['stops'] != 1 else ''} to {p['to']}, "
+                         f"{_ride_min(p)} min ({_hm(p['depart'])}-{_hm(p['arrive'])})")
         else:
             lines.append(f"- Transfer at {p['at']} ({p['from_line']} to {p['to_line']}): "
                          f"about {max(1, round(p['walk_s'] / 60))} min walk"
