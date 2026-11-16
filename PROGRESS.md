@@ -40,7 +40,7 @@
   - [x] Confirm the first real 07:45 message (2026-11-13): sent 07:50:13, 5 min late, probably because the Mac was asleep
   - [ ] Wake the Mac before the job: `sudo pmset repeat wakeorpoweron MTWRF 07:40:00` (BUILD_GUIDE Step 15)
   - [x] Journey line picked 경의선 + 4호선 + 2호선 (36 min, 2 transfers) over 2호선 direct (38 min). Fixed: briefing uses `route.commute()` (fastest and fewest-transfers searches, fewest transfers wins unless fastest saves more than 5 min, saved direction preferred). 98 tests (BUILD_GUIDE Step 15)
-  - [ ] Check Monday's journey line shows 2호선 direct
+  - [ ] Check Monday's journey line shows 2호선 direct (2026-11-16 07:45:28 message sent on time; check the text on the phone)
   - [~] LLM writer (decided 2026-11-12)
     - [x] `briefing/llm.py`: starts `server.py` as an MCP client over stdio, lists its tools, runs a tool-use loop (max 6 rounds), returns the final text
     - [x] Two providers: Gemini (free tier, `GEMINI_API_KEY`, `gemini-3.8-flash`) for now, Claude (`ANTHROPIC_API_KEY`, `claude-haiku-5-5`) later. Auto-picks whichever key is set; `LLM_PROVIDER` forces one
@@ -107,7 +107,7 @@
   - [ ] README: add the GIF and the final eval score
   - [x] Repo prepared for GitHub: secret scan clean, `.gitignore` extended (BUILD_GUIDE Step 18)
   - [x] Pushed to GitHub 2026-11-13: github.com/Jay02510/seoul-commute-mcp
-  - [ ] Commit and push Steps 19-21
+  - [x] Commit and push Steps 19-21 (checked 2026-11-16: `main` in sync with `origin/main`)
   - [x] Case study doc drafted (Claude Docs, 2026-11-13)
 
 ## Handoff (2026-11-15 18:20, end of chat "Seoul Commute: briefings, forecast, cloud job")
