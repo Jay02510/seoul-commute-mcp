@@ -85,8 +85,9 @@
     - [x] #20 failed only on the args check: the model passed 'Sindorim'/'Yeouido', which the server now translates. Grader now compares station args as the server sees them (148 tests); the next `--rerun` regrades #20
     - [x] 2026-11-16 19:01: **28/33 pass**, 1 fail, 4 errors (`evals/results/2026-11-16_1901.json`). weather 5/5, air 4/4, coverage 2/2, trains 6/6, route 7/7, commute 3/4
     - [x] #24 fail: the model subtracted timetable times to state a 24-minute ride; the grounding check flagged it (right arithmetic, but not a tool number). Fix: `route` now states minutes per ride (`_ride_min`), 149 tests
-    - [ ] Tue: `GEMINI_MODEL=gemini-3.5-flash uv run python -m evals.run --rerun evals/results/2026-11-16_1901.json --only 24,28,31,32,33 --delay 15`
-    - [ ] Redeploy the MCP service (Step 14 command) so the connector gets per-ride minutes
+    - [x] Tue 17:05: rerun of 24,28,31-33 all errored with 503 (Gemini overloaded, not quota); still 28/33 (`evals/results/2026-11-17_1705.json`)
+    - [ ] Retry later: `GEMINI_MODEL=gemini-3.5-flash uv run python -m evals.run --rerun evals/results/2026-11-17_1705.json --delay 30`
+    - [x] MCP service redeployed for per-ride minutes (2026-11-16 evening)
 - [x] Subway arrivals cache, 30 s per station, `SUBWAY_CACHE_SECONDS` (BUILD_GUIDE Step 12, 82 tests)
 - [~] Phase 5: remote MCP (Streamable HTTP) deploy, README with GIF + eval scores
   - [x] Host decided: Cloud Run, asia-northeast3 (Seoul)
