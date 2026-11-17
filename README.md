@@ -5,8 +5,9 @@ realtime subway arrivals and timetable-based routes, all from Korean public
 data, served over the Model Context Protocol (MCP). The same server also runs
 commute briefings that arrive on Telegram every weekday, morning and evening.
 
-<!-- GIF: Claude.ai connector answering "Hongdae to Gangnam, what do I need to know?" -->
-![Demo: Claude.ai using the Seoul MCP connector](docs/demo.gif)
+![Demo: Claude using the Seoul MCP Cloud connector to answer "I'm going from Hongdae to Gangnam now. Will it rain on my way home tonight?"](docs/demo.gif)
+
+*Recorded 2026-11-17, shown at 1.5x speed: route, next trains, weather and forecast at both ends, all from the Cloud Run server.*
 
 **Eval score:** _TBD_/33 (gemini-3.5-flash, see [Evaluation](#evaluation))
 · **Tests:** 147 offline + live-fixture checks

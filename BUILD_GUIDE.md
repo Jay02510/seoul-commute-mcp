@@ -1463,6 +1463,28 @@ so the token ends up in your terminal scrollback. Clear it, or copy it straight
 to the clipboard instead:
 `echo "$SERVICE_URL/mcp?key=$(gcloud secrets versions access latest --secret=MCP_ACCESS_TOKEN)" | pbcopy`
 
+### Gotcha: the service's instance went bad (2026-11-17)
+
+In a demo chat every tool except `next_trains` failed with `ConnectTimeout`.
+All the failing tools call `apis.data.go.kr`; `next_trains` calls
+`swopenapi.seoul.go.kr`. The local server on the Mac worked, and the
+`api-probe` job (Step 13c) reached all four APIs from the same region, so
+data.go.kr was not blocking Google Cloud. With max 1 instance, every request
+went to the same long-running instance, which had stopped connecting.
+
+Fix: start a fresh instance without rebuilding the image:
+
+```
+gcloud run services update seoul-commute-mcp --region asia-northeast3 --update-env-vars RESTARTED_AT=$(date +%s)
+```
+
+Note that `check_keys.py` always exits 0, so a "successfully completed" probe
+proves nothing; read its log:
+
+```
+gcloud logging read 'resource.type="cloud_run_job" AND labels."run.googleapis.com/execution_name"="<execution>"' --project seoul-mcp --format='value(textPayload)' --order=asc
+```
+
 ## Step 15: First real briefing, and a route a commuter would take  ✅
 
 **What happened (2026-11-13).** The first launchd briefing reached Telegram.
@@ -1707,7 +1729,7 @@ GEMINI_MODEL=gemini-3.5-flash uv run python -m evals.run --rerun evals/results/2
 
 Then the next day, the newest results file with `--only 22-33`.
 
-## Step 21: Briefing as a Cloud Run job  *(code ready; deploy pending)*
+## Step 21: Briefing as a Cloud Run job  ✅ *(live 2026-11-17)*
 
 **Why.** launchd needs the Mac awake, and `pmset` can wake it only once a day.
 A Cloud Run job started by Cloud Scheduler sends both briefings on time with
@@ -1792,7 +1814,7 @@ The job runs for a few seconds twice a weekday, inside Cloud Run's free tier.
 ## Next steps
 
 - Eval batches: Sunday `--only 11-21`, Monday `--only 22-33` (Step 20); then the score in README and the case study.
-- Cloud briefing: secrets, job, test, scheduler, retire launchd (Step 21).
+- Retire launchd (`launchctl bootout`, Step 21) and confirm the first scheduled sends.
 - Commit and push the Step 19-21 changes.
 - README GIF; budget alert in the console.
 
@@ -1859,3 +1881,7 @@ The job runs for a few seconds twice a weekday, inside Cloud Run's free tier.
 - 2026-11-15: Eval batch 2: 20/33 pass so far. Grader compares station arguments after English-to-Korean translation (case #20 had passed 'Sindorim'). 148 tests.
 - 2026-11-16: Checked state before the eval rerun: repo in sync with GitHub (Steps 19-21 pushed); Monday 07:45 briefing sent on time (07:45:28).
 - 2026-11-16: Eval batch 3: 28/33 pass, 4 errors (quota). #24 failed the grounding check after the model computed a ride time from timetable times; `route` now gives minutes per ride. 149 tests.
+- 2026-11-17: Step 21 live: `seoul-briefing` job deployed, `--force` test sent both routes with Seoul time, Cloud Scheduler jobs at 07:45 and 18:00 (Asia/Seoul). Telegram secrets had been created 2026-11-14.
+
+- 2026-11-17: Cloud service timed out on data.go.kr calls; probe job was fine; new revision (00008) fixed it. Gotcha added under Step 14.
+- 2026-11-17: README GIF: screen recording cut to `docs/demo.gif` with `ffmpeg -t 33 -i <recording>.mov -filter_complex "crop=1700:1448:577:0,setpts=PTS/1.5,fps=8,scale=900:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=64[p];[b][p]paletteuse=dither=bayer:bayer_scale=4" -loop 0 docs/demo.gif` (crop to the chat column, 1.5x speed, 64-colour palette keeps it at 1.1 MB).

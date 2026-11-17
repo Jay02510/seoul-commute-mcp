@@ -58,7 +58,10 @@
     - [x] Fix: briefing forecast uses only today's hours up to 22:00 (preview warned about rain at 05:00 next day). 129 tests
     - [ ] Reload launchd so the 18:00 run is active (or skip: Step 21 replaces launchd)
     - [x] Cloud briefing code: `run --routes-file deploy/routes.json`, Seoul time in the container, image includes `briefing/` (BUILD_GUIDE Step 21)
-    - [ ] Deploy the Cloud Run job + 2 Cloud Scheduler jobs, test with `--force`, then `launchctl bootout`
+    - [x] Cloud Run job `seoul-briefing` deployed and tested with `--force` (2026-11-17 17:33: Seoul time in the header, route line OK, rain tip)
+    - [x] Cloud Scheduler: `seoul-briefing-morning` (45 7 * * 1-5) and `seoul-briefing-evening` (0 18 * * 1-5), Asia/Seoul, no retries
+    - [ ] `launchctl bootout` the Mac job so it doesn't send a second copy
+    - [ ] Confirm the first scheduled sends: 2026-11-17 18:00 (home), 2026-11-18 07:45 (work)
     - [ ] Compare rules vs LLM output for a few days; add cases to `evals.md`
     - [ ] Switch launchd to `--writer llm` once it's reliably better
     - [x] Journey line (BUILD_GUIDE Step 9): `dest` column + migration, `set-dest` / `add-route --to`, `route()` in `gather`, warning if the API's direction differs from the saved one; LLM prompt asks for it too. Route `work` set to ride to 강남 (2026-11-12)
@@ -104,11 +107,12 @@
   - [x] Security fixes (BUILD_GUIDE Step 14, 2026-11-12): station names fully URL-encoded (`safe=""`), 30-character limit, tool errors redacted and generic for network errors, `.gcloudignore`, non-root container. 92 tests
   - [x] Redeployed with the Step 14 command (2026-11-12 17:31; first try from ~ crashed, second failed until the Dockerfile made /app readable for the non-root user)
   - [x] Recheck (17:32): Claude.ai connector, next_trains at 홍대입구 returns live data after the redeploy
+  - [x] 2026-11-17 21:00: cloud service timed out (ConnectTimeout) on every data.go.kr call; subway still worked. The `api-probe` job reached all 4 APIs, so it was the service's single instance, not a block. Fixed by forcing a new revision (`--update-env-vars RESTARTED_AT=...`, revision 00008); all tools checked live 21:20 (BUILD_GUIDE Step 14 gotcha)
+  - [x] README GIF re-recorded 2026-11-17 21:22 (Claude Desktop, incognito, cloud connector only): `docs/demo.gif`, 900 px, 1.5x speed, 1.1 MB
   - [ ] Test HTTPS for the Seoul subway API from the Mac; switch `BASE` if it works
   - [ ] Rotate `MCP_ACCESS_TOKEN` now and then (it is in Cloud Run request logs via `?key=`); later, OAuth
-  - [ ] Record that chat as the README GIF
   - [x] README draft: architecture, tools, briefing, evals, gotchas (2026-11-13)
-  - [ ] README: add the GIF and the final eval score
+  - [ ] README: add the final eval score (GIF added 2026-11-17)
   - [x] Repo prepared for GitHub: secret scan clean, `.gitignore` extended (BUILD_GUIDE Step 18)
   - [x] Pushed to GitHub 2026-11-13: github.com/Jay02510/seoul-commute-mcp
   - [x] Commit and push Steps 19-21 (checked 2026-11-16: `main` in sync with `origin/main`)
@@ -125,9 +129,8 @@ Next steps:
 1. `git push` (a docs commit may be waiting locally; `git status -sb` shows "ahead").
 2. Tue after 17:00 KST: eval rerun of #24 and the 4 errors (command above).
    Then put the score in README and the case study (28/33 so far).
-3. Cloud briefing: BUILD_GUIDE Step 21 (Telegram secrets, job deploy, `--force`
-   test, Cloud Scheduler, then `launchctl bootout`). Afterwards update the case
-   study diagram ("launchd" to "Cloud Run job").
+3. Cloud briefing is live (2026-11-17). Left: `launchctl bootout`, confirm the
+   first scheduled sends.
 4. README GIF (`docs/demo.gif`) of the Claude.ai connector; budget alert.
 5. Later: compare rules vs LLM writer; disruption alerts; Telegram two-way bot.
 Redeploy the MCP service after server changes: Step 14 command.
