@@ -1469,6 +1469,14 @@ to the clipboard instead:
 
 ### Gotcha: the service's instance went bad (2026-11-17)
 
+**Correction (2026-11-18):** this diagnosis was wrong. The 07:45 briefing on
+11-18 ran in a brand-new container and still timed out on every data.go.kr
+call, then the service worked again at 10:00 without any change. The real
+problem is intermittent: connections from Cloud Run to `apis.data.go.kr`
+sometimes time out for a while. The new revision only happened to coincide
+with a good period. See Step 23 for the fix.
+
+
 In a demo chat every tool except `next_trains` failed with `ConnectTimeout`.
 All the failing tools call `apis.data.go.kr`; `next_trains` calls
 `swopenapi.seoul.go.kr`. The local server on the Mac worked, and the
@@ -1854,10 +1862,53 @@ Then pin the repo on your GitHub profile (Customize your pins).
 - The Cloud Run images built before this step still have `check_keys.py` at
   the root. Redeploy before running the probe with the new path.
 
+## Step 23: Retry when data.go.kr won't connect  ✅ *(redeploy pending)*
+
+**What happened.** The 2026-11-18 07:45 cloud briefing had no weather,
+forecast, air or journey line: every `apis.data.go.kr` call ended in
+`ConnectTimeout`. Train arrivals (`swopenapi.seoul.go.kr`) worked. At 10:00
+the same cloud tools answered normally. Together with 11-17 (failures around
+17:30 to 21:15, fine at 21:16), this points to data.go.kr intermittently not
+accepting connections from Google Cloud, not to anything in our container.
+
+**Fix.** `sources/http.py` now retries a request up to 2 more times (after 1 s
+and 3 s) when the connection itself fails (`ConnectTimeout`, `ConnectError`).
+A reply that did arrive, even an error, is never re-sent. The connect timeout
+is 5 s (reading the reply still has 10 s), so the worst case is about 24 s
+before a tool gives up. Each retry is logged to stderr with the host only
+(the URL's query holds the API key), so Cloud Run logs show how often it
+happens. 4 new tests, 153 in total.
+
+**Redeploy both** (the service and the briefing job use the same code):
+
+```
+gcloud run deploy seoul-commute-mcp --source ~/Projects/seoul-commute-mcp --region asia-northeast3
+```
+```
+gcloud run jobs deploy seoul-briefing --source ~/Projects/seoul-commute-mcp --region asia-northeast3
+```
+
+(The job keeps its command, secrets and settings from Step 21; only the image
+changes. If gcloud asks for them again, use the full Step 21 command.)
+
+**How to tell if retries are enough.** After a few days:
+
+```
+gcloud logging read 'textPayload:"retry"' --project seoul-mcp --freshness 3d --format='value(timestamp,textPayload)'
+```
+
+Retries that end in success mean the outages are short. If briefings still
+arrive with "unavailable", the outages last longer than ~20 s and the next step
+is a fixed outgoing IP (Cloud NAT, a few dollars a month) or keeping the Mac as
+a backup sender.
+
+**Keep launchd for now.** Don't run `launchctl bootout` until the cloud
+briefing has a few clean mornings.
+
 ## Next steps
 
 - Eval rerun of the 5 open cases (#24, 28, 31-33); then the final score in README, the case study doc and the portfolio.
-- Confirm a cloud briefing arrived, then retire launchd (`launchctl bootout`, Step 21).
+- Redeploy service and job (Step 23); watch retries for a few days; retire launchd only after clean cloud briefings.
 - `gh repo edit` and pin the repo (Step 22).
 - Budget alert in the console.
 
@@ -1929,3 +1980,4 @@ Then pin the repo on your GitHub profile (Customize your pins).
 - 2026-11-17: Cloud service timed out on data.go.kr calls; probe job was fine; new revision (00008) fixed it. Gotcha added under Step 14.
 - 2026-11-17: README GIF: screen recording cut to `docs/demo.gif` with `ffmpeg -t 33 -i <recording>.mov -filter_complex "crop=1700:1448:577:0,setpts=PTS/1.5,fps=8,scale=900:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=64[p];[b][p]paletteuse=dither=bayer:bayer_scale=4" -loop 0 docs/demo.gif` (crop to the chat column, 1.5x speed, 64-colour palette keeps it at 1.1 MB).
 - 2026-11-18: Step 22: scripts moved to `scripts/`, `check_keys.py` exits 1 on failure, GitHub Actions test workflow, MIT license, README badges, score, layout table.
+- 2026-11-18: Step 23: 07:45 cloud briefing had no data.go.kr data (ConnectTimeout) though the container was new, so the 11-17 'bad instance' diagnosis was wrong. Connection failures now retry twice (1 s, 3 s), connect timeout 5 s, retries logged by host. 153 tests.

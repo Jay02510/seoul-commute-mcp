@@ -14,7 +14,7 @@ commute briefings that arrive on Telegram every weekday, morning and evening.
 *Recorded 2026-11-17, shown at 1.5x speed: route, next trains, weather and forecast at both ends, all from the Cloud Run server.*
 
 **Eval score:** 28/33 with no graded failures; the other 5 hit model outages and are waiting for a rerun (gemini-3.5-flash, see [Evaluation](#evaluation))
-· **Tests:** 149, offline, run on every push
+· **Tests:** 153, offline, run on every push
 
 ## What it does
 
@@ -176,6 +176,9 @@ the cleanup policy are in `BUILD_GUIDE.md` (Steps 13-14).
 - Telling a model "never estimate stop counts" was not enough; giving it a
   route tool and a grounding check in the evals was.
 - launchd cannot read `~/Desktop` and does not wake a sleeping Mac.
+- From Google Cloud, connections to data.go.kr sometimes time out for minutes
+  at a time while the Seoul subway API keeps working. Connection failures are
+  retried; replies are not.
 
 ## Repository layout
 
