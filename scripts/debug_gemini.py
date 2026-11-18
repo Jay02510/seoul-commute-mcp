@@ -3,8 +3,12 @@
 1. Lists the Flash models your key can use (pick backups for GEMINI_MODEL).
 2. Sends one tiny request to each model in GEMINI_MODEL (or the default).
 
-    uv run python debug_gemini.py
+    uv run python scripts/debug_gemini.py
 """
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # repo root, for `sources`
 import asyncio
 import os
 import time

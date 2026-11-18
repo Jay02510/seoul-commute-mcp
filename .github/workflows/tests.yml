@@ -1,0 +1,17 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+      # Tests run offline on recorded fixtures: no API keys, no LLM SDKs needed.
+      - run: uv sync --locked --no-default-groups --group dev
+      - run: uv run --no-sync pytest

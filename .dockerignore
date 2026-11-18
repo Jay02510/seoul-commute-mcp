@@ -9,3 +9,4 @@ briefing.db*
 tests/
 evals/
 launchd/
+scripts/debug_*.py

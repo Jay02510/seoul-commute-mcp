@@ -12,7 +12,7 @@
   - [x] Connected to Claude Desktop (claude_desktop_config.json, `/opt/homebrew/bin/uv`)
   - [x] All 4 tools tested live through Claude Desktop: real data, clean errors, limit cap works
   - [x] `next_trains` now shows line name (subwayId map) and strips '역' in the header
-  - [x] Natural questions in Claude Desktop: 5 cases logged in `evals.md` (3 pass, 2 partial)
+  - [x] Natural questions in Claude Desktop: 5 cases logged in `evals.md` (now `evals/manual-checks.md`) (3 pass, 2 partial)
   - [x] Fixes: `next_trains` default limit 10; server `instructions` (Seoul-only coverage, no route data, label estimates)
   - [x] Re-tested eval #2 (pass) and #4 (partial: still guesses stop count, said 14, actual 16) on 2026-11-12
   - [x] Fix for #4: server instructions now forbid stop counts and journey times (route tool stays in backlog)
@@ -62,7 +62,7 @@
     - [x] Cloud Scheduler: `seoul-briefing-morning` (45 7 * * 1-5) and `seoul-briefing-evening` (0 18 * * 1-5), Asia/Seoul, no retries
     - [ ] `launchctl bootout` the Mac job so it doesn't send a second copy
     - [ ] Confirm the first scheduled sends: 2026-11-17 18:00 (home), 2026-11-18 07:45 (work)
-    - [ ] Compare rules vs LLM output for a few days; add cases to `evals.md`
+    - [ ] Compare rules vs LLM output for a few days; add cases to `evals/manual-checks.md`
     - [ ] Switch launchd to `--writer llm` once it's reliably better
     - [x] Journey line (BUILD_GUIDE Step 9): `dest` column + migration, `set-dest` / `add-route --to`, `route()` in `gather`, warning if the API's direction differs from the saved one; LLM prompt asks for it too. Route `work` set to ride to 강남 (2026-11-12)
     - [x] Journey line checked live (2026-11-12 14:32): `Journey to 강남: 38 min, 17 stops, no transfers (2호선 toward 합정; timetable 14:37-15:15)`, no direction warning
@@ -112,8 +112,11 @@
   - [ ] Test HTTPS for the Seoul subway API from the Mac; switch `BASE` if it works
   - [ ] Rotate `MCP_ACCESS_TOKEN` now and then (it is in Cloud Run request logs via `?key=`); later, OAuth
   - [x] README draft: architecture, tools, briefing, evals, gotchas (2026-11-13)
-  - [ ] README: add the final eval score (GIF added 2026-11-17)
+  - [ ] README: replace 28/33 with the final eval score after the rerun (GIF added 2026-11-17)
   - [x] Repo prepared for GitHub: secret scan clean, `.gitignore` extended (BUILD_GUIDE Step 18)
+  - [x] Repo polish for reviewers (BUILD_GUIDE Step 22, 2026-11-18): `scripts/`, `check_keys.py` exits 1 on failure, GitHub Actions tests, MIT license, README badges, score and layout
+  - [ ] `gh repo edit` (description, website, topics) and pin the repo on the GitHub profile
+  - [ ] Check the first Actions run is green after the push
   - [x] Pushed to GitHub 2026-11-13: github.com/Jay02510/seoul-commute-mcp
   - [x] Commit and push Steps 19-21 (checked 2026-11-16: `main` in sync with `origin/main`)
   - [x] Case study doc drafted (Claude Docs, 2026-11-13)

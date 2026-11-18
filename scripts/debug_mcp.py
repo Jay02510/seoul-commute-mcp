@@ -1,8 +1,12 @@
 """Diagnostic: talk to server.py over MCP exactly like briefing/llm.py does,
 but with no model involved. Prints each step with a timestamp.
 
-    uv run python debug_mcp.py
+    uv run python scripts/debug_mcp.py
 """
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # repo root, for `sources`
 import asyncio
 import sys
 import traceback

@@ -3,13 +3,17 @@
 API: 서울교통공사_최단경로이동정보 (data.go.kr 15143842).
 Apply for it on data.go.kr first (활용신청); it uses the same DATA_GO_KR_KEY.
 
-    uv run python debug_route.py                 # 홍대입구 -> 강남
-    uv run python debug_route.py 공덕 강남
-    uv run python debug_route.py 0239 0222 --code   # by station code (0239 = Line 2 no. 239)
+    uv run python scripts/debug_route.py                 # 홍대입구 -> 강남
+    uv run python scripts/debug_route.py 공덕 강남
+    uv run python scripts/debug_route.py 0239 0222 --code   # by station code (0239 = Line 2 no. 239)
 
 Writes logs/route_sample.json so the parser in sources/route.py can be built
 against the real response shape. The key is never printed.
 """
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))  # repo root, for `sources`
 import asyncio
 import json
 import sys
@@ -41,7 +45,7 @@ async def main(src: str, dst: str, by_code: bool = False) -> None:
         print("Not JSON (usually: API not approved yet, or key not active):")
         print(text[:500])
         return
-    out = Path("logs/route_sample.json")
+    out = Path(__file__).resolve().parent.parent / "logs" / "route_sample.json"
     out.write_text(json.dumps(r.json(), ensure_ascii=False, indent=2))
     body = r.json().get("body") or {}
     print(f"Saved {out}. Result: {r.json().get('header')}")

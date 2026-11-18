@@ -1,5 +1,9 @@
 # Seoul Commute MCP
 
+[![tests](https://github.com/Jay02510/seoul-commute-mcp/actions/workflows/tests.yml/badge.svg)](https://github.com/Jay02510/seoul-commute-mcp/actions/workflows/tests.yml)
+![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
 Live Seoul commute data for AI assistants: weather now and later, fine dust,
 realtime subway arrivals and timetable-based routes, all from Korean public
 data, served over the Model Context Protocol (MCP). The same server also runs
@@ -9,8 +13,8 @@ commute briefings that arrive on Telegram every weekday, morning and evening.
 
 *Recorded 2026-11-17, shown at 1.5x speed: route, next trains, weather and forecast at both ends, all from the Cloud Run server.*
 
-**Eval score:** _TBD_/33 (gemini-3.5-flash, see [Evaluation](#evaluation))
-· **Tests:** 147 offline + live-fixture checks
+**Eval score:** 28/33 with no graded failures; the other 5 hit model outages and are waiting for a rerun (gemini-3.5-flash, see [Evaluation](#evaluation))
+· **Tests:** 149, offline, run on every push
 
 ## What it does
 
@@ -122,7 +126,8 @@ and won amount in the answer must appear in a tool result. Outage cases inject
 | 2026-11-12 15:00 | mostly gemini-3.1-flash-lite | 22/30 | first run |
 | 2026-11-12 15:26 | gemini 3.x flash | 28/30 | tool docstrings: always call `route`, check both ends |
 | 2026-11-13 13:47 | gemini-3.5-flash | #19 pass | `route` retries station names that keep '역' (서울역) |
-| _TBD_ | gemini-3.5-flash | _TBD_/33 | forecast cases added |
+| 2026-11-16 | gemini-3.5-flash | 28/33 | 33 cases incl. forecasts; #24 fixed (`route` gives minutes per ride) |
+| 2026-11-17 | gemini-3.5-flash | 28/33 | rerun of the 5 open cases: all 503 from Gemini, not graded |
 
 ```bash
 GEMINI_MODEL=gemini-3.5-flash uv run python -m evals.run
@@ -134,7 +139,7 @@ uv run python -m evals.run --only 19 -v
 ```bash
 cp .env.example .env        # DATA_GO_KR_KEY, SEOUL_API_KEY; Telegram and LLM keys for the briefing
 uv sync
-uv run check_keys.py        # every line should say OK
+uv run python scripts/check_keys.py   # every line should say OK
 uv run pytest               # offline; live-fixture tests run after tests/record_fixtures.py
 uv run mcp dev server.py    # MCP Inspector
 ```
@@ -172,6 +177,21 @@ the cleanup policy are in `BUILD_GUIDE.md` (Steps 13-14).
   route tool and a grounding check in the evals was.
 - launchd cannot read `~/Desktop` and does not wake a sleeping Mac.
 
+## Repository layout
+
+| Path | What it is |
+|---|---|
+| `server.py`, `http_app.py` | The MCP server (stdio) and its Streamable HTTP wrapper for Cloud Run |
+| `sources/` | One module per API, plus districts and station names |
+| `briefing/` | Telegram briefings: routes, data fetch, rules writer, LLM writer, CLI |
+| `evals/` | 33 eval cases, grader, runner, saved results, and the first hand-run checks |
+| `tests/` | pytest suite with recorded API fixtures |
+| `scripts/` | `check_keys.py` (smoke test, also the Cloud Run probe job) and one-off debug scripts |
+| `deploy/`, `Dockerfile`, `launchd/` | Cloud Run job routes, image cleanup policy, container, the old Mac schedule |
+| `BUILD_GUIDE.md` | Step-by-step build log: every command, why, and what went wrong |
+| `PROGRESS.md` | Checklist and session handoffs |
+| `CLAUDE.md` | Instructions for the AI coding assistant used to build this |
+
 ## Data sources
 
 - 기상청 단기예보 조회서비스 (KMA): data.go.kr
@@ -183,3 +203,7 @@ Data © the providers above, used under their open data licenses (attribution re
 
 Built step by step; the full build log is in [`BUILD_GUIDE.md`](BUILD_GUIDE.md),
 progress in [`PROGRESS.md`](PROGRESS.md).
+
+## License
+
+Code: [MIT](LICENSE). Data belongs to the providers listed above.

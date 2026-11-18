@@ -14,7 +14,8 @@ RUN uv sync --locked --no-default-groups --no-install-project
 COPY sources ./sources
 COPY briefing ./briefing
 COPY deploy/routes.json ./deploy/routes.json
-COPY server.py http_app.py check_keys.py ./
+COPY server.py http_app.py ./
+COPY scripts/check_keys.py ./scripts/check_keys.py
 
 ENV PATH="/app/.venv/bin:$PATH"
 # Run as an unprivileged user, not root. The copied files keep their Mac

@@ -15,6 +15,5 @@ logs/
 briefing.db*
 tests/
 evals/
-evals.md
 launchd/
-debug_*.py
+scripts/debug_*.py

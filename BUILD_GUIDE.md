@@ -21,6 +21,10 @@ explanation.
 | **Cache / TTL** | Keeping a recent answer and reusing it instead of asking the API again. TTL (time to live) is how long an answer may be reused, here 30 seconds. |
 | **Streamable HTTP** | The MCP transport for servers on the internet: the client sends each message as an HTTP POST to one URL (here `/mcp`). The local alternative is stdio, where the client starts the server as a program. |
 | **Stateless server** | Each request carries everything needed to answer it, so no memory of earlier requests is kept and any server instance can handle any request. |
+| **CI (continuous integration)** | Running the tests automatically on a server every time code is pushed, so a broken change shows up straight away. Here it is GitHub Actions. |
+| **GitHub Actions / workflow** | GitHub's built-in CI. A workflow is a YAML file in `.github/workflows/` that says when to run (on push) and what to run (install, then pytest). |
+| **Badge** | A small image at the top of the README that shows live status, such as "tests passing", linked to the latest run. |
+| **MIT License** | A short open-source license: anyone may use and change the code if they keep the copyright notice. Without any license, the code is legally "all rights reserved". |
 | **Cloud Run** | Google's service that runs a container and gives it an HTTPS URL; it starts instances when requests arrive and stops them when idle. A Cloud Run *job* runs a container once to the end. |
 | **Secret Manager** | Google Cloud's store for keys and passwords; Cloud Run reads them at start-up as environment variables. |
 | **Budget alert** | A Google Cloud setting that emails you when spending passes a share of an amount you choose. It warns; it does not cut off spending. |
@@ -148,7 +152,7 @@ cp .env.example .env                       # then paste real keys
 
 **Verify:**
 ```bash
-uv run check_keys.py    # expect 3x OK
+uv run python scripts/check_keys.py    # expect 3x OK
 ```
 
 ---
@@ -476,8 +480,8 @@ The API is the better first try.
    click 활용 신청하기. Approved instantly (2026-11-12).
 2. Once approved (dev keys are usually instant, sometimes up to an hour):
    ```bash
-   uv run python debug_route.py            # 홍대입구 -> 강남
-   uv run python debug_route.py 공덕 강남
+   uv run python scripts/debug_route.py            # 홍대입구 -> 강남
+   uv run python scripts/debug_route.py 공덕 강남
    ```
    This saves the raw reply to `logs/route_sample.json` without printing the key.
    **Gotcha:** in Claude's built-in browser the 활용 신청하기 button did
@@ -748,8 +752,8 @@ APIs: needs a key and live data, which the test sandbox cannot reach.
   which Flash models your key can use.
 - Each model call has a 60 s limit (`MODEL_TIMEOUT`), so a hang turns into a
   clear error and the rules fallback still sends.
-- Diagnostics: `uv run python debug_mcp.py` (MCP connection, no model) and
-  `uv run python debug_gemini.py` (one Gemini call, no MCP).
+- Diagnostics: `uv run python scripts/debug_mcp.py` (MCP connection, no model) and
+  `uv run python scripts/debug_gemini.py` (one Gemini call, no MCP).
 - Gemini counts "thinking" tokens against `max_output_tokens`, so its limit
   is set higher than Claude's or replies can come back empty.
 - Free-tier quotas change without notice. If Gemini starts returning 429
@@ -1123,8 +1127,8 @@ answer with.
 **How it was confirmed (on the Mac; data.go.kr is not reachable from Claude's VM):**
 
 ```
-uv run python debug_route.py 서울 강남
-uv run python debug_route.py 서울역 강남
+uv run python scripts/debug_route.py 서울 강남
+uv run python scripts/debug_route.py 서울역 강남
 ```
 
 The first returned 319 characters and no paths. The second returned the full
@@ -1319,7 +1323,7 @@ end instead of serving requests). This builds the image too, so the service
 deploy afterwards is quick.
 
 ```
-gcloud run jobs deploy api-probe --source . --command python --args check_keys.py --set-secrets DATA_GO_KR_KEY=DATA_GO_KR_KEY:latest,SEOUL_API_KEY=SEOUL_API_KEY:latest --max-retries 0 --execute-now --wait
+gcloud run jobs deploy api-probe --source . --command python --args scripts/check_keys.py --set-secrets DATA_GO_KR_KEY=DATA_GO_KR_KEY:latest,SEOUL_API_KEY=SEOUL_API_KEY:latest --max-retries 0 --execute-now --wait
 ```
 ```
 gcloud logging read 'resource.type=cloud_run_job AND resource.labels.job_name=api-probe' --limit 30 --format='value(textPayload)'
@@ -1478,8 +1482,8 @@ Fix: start a fresh instance without rebuilding the image:
 gcloud run services update seoul-commute-mcp --region asia-northeast3 --update-env-vars RESTARTED_AT=$(date +%s)
 ```
 
-Note that `check_keys.py` always exits 0, so a "successfully completed" probe
-proves nothing; read its log:
+At the time `check_keys.py` always exited 0, so a "successfully completed" probe
+proved nothing; read its log (since Step 22 it exits 1 when any API fails):
 
 ```
 gcloud logging read 'resource.type="cloud_run_job" AND labels."run.googleapis.com/execution_name"="<execution>"' --project seoul-mcp --format='value(textPayload)' --order=asc
@@ -1811,12 +1815,51 @@ The job runs for a few seconds twice a weekday, inside Cloud Run's free tier.
 - Redeploy the MCP service too (Step 14 command): the English names are in
   `server.py`'s code path.
 
+## Step 22: Make the repository easy to read for a reviewer  ✅
+
+**Why.** A hiring manager gives a repo about 30 seconds: the README's first
+screen, whether the tests pass, whether it looks finished. The code was fine;
+the front page had a `TBD` score, an old test count, no license and four loose
+scripts next to the server.
+
+**What changed (2026-11-18).**
+- `scripts/`: `check_keys.py` and the three `debug_*.py` scripts moved there
+  with `git mv` (keeps their history). Each adds the repo root to `sys.path`
+  so `from sources import ...` still works. Run them as
+  `uv run python scripts/check_keys.py`.
+- `check_keys.py` now exits 1 if any API fails, so a Cloud Run probe job shows
+  as failed instead of "successfully completed" (the trap from 2026-11-17).
+- `Dockerfile` copies `scripts/check_keys.py`; the probe job command is now
+  `--args scripts/check_keys.py` (Step 13c). `.gcloudignore` and
+  `.dockerignore` skip `scripts/debug_*.py`.
+- `evals.md` (the first hand-run checks from Step 6) moved to
+  `evals/manual-checks.md`.
+- `.github/workflows/tests.yml`: on every push, install the dev group only
+  (no LLM SDKs, no keys) and run pytest. Checked first in a clean copy with no
+  `.env`: 149 passed.
+- `LICENSE` (MIT), README badges (tests, Python, license), the real eval score
+  and test count, a "Repository layout" table and a License section.
+
+**Do once on the Mac** (sets the About panel, which lives on GitHub, not in the repo):
+
+```
+gh repo edit Jay02510/seoul-commute-mcp --description "MCP server: live Seoul transit, weather and air data for AI assistants, with grounding evals" --homepage "https://www.jason-portfolio.com/case/seoul-commute" --add-topic mcp --add-topic model-context-protocol --add-topic llm-evaluation --add-topic cloud-run --add-topic python --add-topic seoul
+```
+
+Then pin the repo on your GitHub profile (Customize your pins).
+
+**Gotchas.**
+- The first push after this triggers the workflow; the badge shows "no
+  status" until that run finishes (about a minute).
+- The Cloud Run images built before this step still have `check_keys.py` at
+  the root. Redeploy before running the probe with the new path.
+
 ## Next steps
 
-- Eval batches: Sunday `--only 11-21`, Monday `--only 22-33` (Step 20); then the score in README and the case study.
-- Retire launchd (`launchctl bootout`, Step 21) and confirm the first scheduled sends.
-- Commit and push the Step 19-21 changes.
-- README GIF; budget alert in the console.
+- Eval rerun of the 5 open cases (#24, 28, 31-33); then the final score in README, the case study doc and the portfolio.
+- Confirm a cloud briefing arrived, then retire launchd (`launchctl bootout`, Step 21).
+- `gh repo edit` and pin the repo (Step 22).
+- Budget alert in the console.
 
 ---
 
@@ -1885,3 +1928,4 @@ The job runs for a few seconds twice a weekday, inside Cloud Run's free tier.
 
 - 2026-11-17: Cloud service timed out on data.go.kr calls; probe job was fine; new revision (00008) fixed it. Gotcha added under Step 14.
 - 2026-11-17: README GIF: screen recording cut to `docs/demo.gif` with `ffmpeg -t 33 -i <recording>.mov -filter_complex "crop=1700:1448:577:0,setpts=PTS/1.5,fps=8,scale=900:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=64[p];[b][p]paletteuse=dither=bayer:bayer_scale=4" -loop 0 docs/demo.gif` (crop to the chat column, 1.5x speed, 64-colour palette keeps it at 1.1 MB).
+- 2026-11-18: Step 22: scripts moved to `scripts/`, `check_keys.py` exits 1 on failure, GitHub Actions test workflow, MIT license, README badges, score, layout table.
