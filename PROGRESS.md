@@ -109,8 +109,9 @@
   - [x] Recheck (17:32): Claude.ai connector, next_trains at 홍대입구 returns live data after the redeploy
   - [x] 2026-11-17 21:00: cloud service timed out (ConnectTimeout) on every data.go.kr call; subway still worked. The `api-probe` job reached all 4 APIs, so it was the service's single instance, not a block. A new revision (00008) seemed to fix it, but see 2026-11-18: the cause is intermittent, not the instance
   - [x] 2026-11-18 07:45 cloud briefing: all data.go.kr calls ConnectTimeout in a fresh job container; fine again at 10:00. Intermittent data.go.kr connections from Google Cloud. Retries on connection failures added (BUILD_GUIDE Step 23, 153 tests)
-  - [ ] Redeploy the service and the `seoul-briefing` job (Step 23 commands)
-  - [ ] After a few days, check retry logs; keep launchd as backup until cloud briefings are clean
+  - [x] Redeployed the service (revision 00009) and the `seoul-briefing` job (2026-11-18)
+  - [x] 2026-11-19 07:45: retries ran for all 8 calls and all timed out. Decided against Cloud NAT (~US$5/month): the briefing is a portfolio demo, not a daily service
+  - [ ] Pause both Scheduler jobs and `launchctl bootout` (BUILD_GUIDE Step 23 result)
   - [x] README GIF re-recorded 2026-11-17 21:22 (Claude Desktop, incognito, cloud connector only): `docs/demo.gif`, 900 px, 1.5x speed, 1.1 MB
   - [ ] Test HTTPS for the Seoul subway API from the Mac; switch `BASE` if it works
   - [ ] Rotate `MCP_ACCESS_TOKEN` now and then (it is in Cloud Run request logs via `?key=`); later, OAuth

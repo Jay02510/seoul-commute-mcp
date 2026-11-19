@@ -67,9 +67,10 @@ districts in English or Korean (`Mapo`, `마포구`).
 - `briefing/`: the Telegram briefing. SQLite stores routes and a send log
   (no double sends), `compose.py` is a rule-based writer, `llm.py` is an MCP
   client that lets Gemini or Claude write the message with the same tools.
-  Each route has its own send time. In production it runs as a Cloud Run job
-  that Cloud Scheduler starts at 07:45 and 18:00 on weekdays (routes from
-  `deploy/routes.json`); on the Mac, launchd does the same with SQLite.
+  Each route has its own send time. In the cloud it runs as a Cloud Run job
+  (routes from `deploy/routes.json`); Cloud Scheduler sent it at 07:45 and
+  18:00 on weekdays until 2026-11-19, and it now runs on demand. On the Mac,
+  launchd can do the same with SQLite.
 
 ## The morning briefing
 
@@ -177,8 +178,9 @@ the cleanup policy are in `BUILD_GUIDE.md` (Steps 13-14).
   route tool and a grounding check in the evals was.
 - launchd cannot read `~/Desktop` and does not wake a sleeping Mac.
 - From Google Cloud, connections to data.go.kr sometimes time out for minutes
-  at a time while the Seoul subway API keeps working. Connection failures are
-  retried; replies are not.
+  to hours while the Seoul subway API keeps working. Short retries did not
+  help; a fixed outgoing IP (Cloud NAT) probably would, at about US$5 a month.
+  Since the briefing is a demo, the schedule is paused and it runs on demand.
 
 ## Repository layout
 

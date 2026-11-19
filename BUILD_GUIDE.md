@@ -1905,10 +1905,32 @@ a backup sender.
 **Keep launchd for now.** Don't run `launchctl bootout` until the cloud
 briefing has a few clean mornings.
 
+**Result (2026-11-19).** Not enough. The 07:45 job logged `retry 1/2` and
+`retry 2/2` for all 8 data.go.kr calls, and every one still timed out; the
+18:00 run the evening before was complete, and the cloud tools worked again by
+11:00. The outages last minutes to hours, not seconds. The real fix would be a
+fixed outgoing IP (Cloud NAT, about US$5 a month). Decision: not worth it,
+because the briefing was built to prove the pipeline, not as a daily service.
+Scheduled sends are paused (below); the retries stay, since they cost nothing
+and help with short drops.
+
+```
+gcloud scheduler jobs pause seoul-briefing-morning --location asia-northeast3
+```
+```
+gcloud scheduler jobs pause seoul-briefing-evening --location asia-northeast3
+```
+```
+launchctl bootout gui/$(id -u)/com.jasonbenjamin.seoul-briefing
+```
+
+To send one on demand (for a demo): `gcloud run jobs execute seoul-briefing --region asia-northeast3 --args=-m,briefing.main,run,--routes-file,deploy/routes.json,--force --wait`.
+To restart the schedule: `gcloud scheduler jobs resume <name> --location asia-northeast3`.
+
 ## Next steps
 
 - Eval rerun of the 5 open cases (#24, 28, 31-33); then the final score in README, the case study doc and the portfolio.
-- Redeploy service and job (Step 23); watch retries for a few days; retire launchd only after clean cloud briefings.
+- Pause the two Scheduler jobs and boot out launchd (Step 23 result).
 - `gh repo edit` and pin the repo (Step 22).
 - Budget alert in the console.
 
@@ -1981,3 +2003,4 @@ briefing has a few clean mornings.
 - 2026-11-17: README GIF: screen recording cut to `docs/demo.gif` with `ffmpeg -t 33 -i <recording>.mov -filter_complex "crop=1700:1448:577:0,setpts=PTS/1.5,fps=8,scale=900:-1:flags=lanczos,split[a][b];[a]palettegen=max_colors=64[p];[b][p]paletteuse=dither=bayer:bayer_scale=4" -loop 0 docs/demo.gif` (crop to the chat column, 1.5x speed, 64-colour palette keeps it at 1.1 MB).
 - 2026-11-18: Step 22: scripts moved to `scripts/`, `check_keys.py` exits 1 on failure, GitHub Actions test workflow, MIT license, README badges, score, layout table.
 - 2026-11-18: Step 23: 07:45 cloud briefing had no data.go.kr data (ConnectTimeout) though the container was new, so the 11-17 'bad instance' diagnosis was wrong. Connection failures now retry twice (1 s, 3 s), connect timeout 5 s, retries logged by host. 153 tests.
+- 2026-11-19: Step 23 result: retries ran at 07:45 and all timed out (outages last minutes to hours). Decided against Cloud NAT (~US$5/month); scheduled briefings paused, on-demand run kept for demos.
