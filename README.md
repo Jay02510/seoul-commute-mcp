@@ -3,6 +3,7 @@
 [![tests](https://github.com/Jay02510/seoul-commute-mcp/actions/workflows/tests.yml/badge.svg)](https://github.com/Jay02510/seoul-commute-mcp/actions/workflows/tests.yml)
 ![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Agensi skill](https://img.shields.io/badge/Agensi-free%20skill-5b5bd6)](https://www.agensi.io/skills/seoul-commute-live-subway-weather-fine-dust)
 
 Live Seoul commute data for AI assistants: weather now and later, fine dust,
 realtime subway arrivals and timetable-based routes, all from Korean public
@@ -13,8 +14,19 @@ commute briefings that arrive on Telegram every weekday, morning and evening.
 
 *Recorded 2026-11-17, shown at 1.5x speed: route, next trains, weather and forecast at both ends, all from the Cloud Run server.*
 
-**Eval score:** 28/33 with no graded failures; the other 5 hit model outages and are waiting for a rerun (gemini-3.5-flash, see [Evaluation](#evaluation))
+**Eval score:** 30/33 with no graded failures; the other 3 hit model outages (gemini-3.5-flash, 2026-11-20, see [Evaluation](#evaluation))
 · **Tests:** 153, offline, run on every push
+
+## Use it as an agent skill
+
+The server comes with a matching agent skill, listed free on Agensi:
+**[Seoul Commute: Live Subway, Weather & Fine Dust](https://www.agensi.io/skills/seoul-commute-live-subway-weather-fine-dust)**.
+It tells your agent when to call each tool and enforces the rules the evals
+check: stop counts, journey times and fares only from `route`, later weather
+only from `forecast`, both ends of the trip, and no reassurance on missing
+data. Connect the server (see [Setup](#setup)), then add the skill in Claude
+Code, Cursor, Codex CLI or any agent that reads SKILL.md. The source is in
+[`skill/seoul-commute/SKILL.md`](skill/seoul-commute/SKILL.md).
 
 ## What it does
 
@@ -129,6 +141,7 @@ and won amount in the answer must appear in a tool result. Outage cases inject
 | 2026-11-13 13:47 | gemini-3.5-flash | #19 pass | `route` retries station names that keep '역' (서울역) |
 | 2026-11-16 | gemini-3.5-flash | 28/33 | 33 cases incl. forecasts; #24 fixed (`route` gives minutes per ride) |
 | 2026-11-17 | gemini-3.5-flash | 28/33 | rerun of the 5 open cases: all 503 from Gemini, not graded |
+| 2026-11-20 | gemini-3.5-flash | 30/33 | full run; the 3 not passed were Gemini outages, not graded |
 
 ```bash
 GEMINI_MODEL=gemini-3.5-flash uv run python -m evals.run
